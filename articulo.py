@@ -1,10 +1,10 @@
 from abc import ABCMeta, abstractmethod
 class Articulo(metaclass=ABCMeta):
     """docstring for """
-    def __init__(self, reservas,fecha_reserva,Usuario):
+    def __init__(self, reservas,fecha_reserva,Funcionario):
         self.reservas = reservas
         self.fecha_reserva=fecha_reserva
-        self.usuario = Usuario
+        self.funcionario = Funcionario
     @abstractmethod
     def cargar_articulo(self):
         pass
