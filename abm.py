@@ -1,12 +1,13 @@
 from persistence import MiZODB,transaction
 from funcionario import Funcionario
-
-#db=MiZODB()
-#dbroot=db.raiz
-f1 = Funcionario('Jose', 'Gonzalez', 5644600, '17/05/2016', 'M' , 'CUIDADOR','17/05/2016')
-#dbroot['f4']= f1
-#dbroot.keys()
-#transaction.commit()
-#db.close()
+nombre = None
+clave = None
+f1 = Funcionario(nombre, 'Gimenez', 4785758, '17/07/2000', 'F' , 'CONTADOR','17/05/2016',clave)
 f1.buscar_funcionario()
-#f1.eliminar_funcionario()
+#nombre= input ('nombre: ')
+clave = input ( 'Clave: ')
+f1 = Funcionario(nombre, 'Gimenez', 4785758, '17/07/2000', 'F' , 'CONTADOR','17/05/2016',clave)
+#f1.cargar_funcionario(f1)
+#f1.buscar_funcionario(clave)
+#f1.buscar_funcionario()
+f1.eliminar_funcionario(clave)
