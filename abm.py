@@ -3,6 +3,7 @@ from funcionario import Funcionario
 from notebook import Notebook
 from persona import Persona
 from proyector import Proyector
+from articulo import Articulo
 nombre = None
 clave = None
 #clave= input ('Ingrese la clave del usuario: ')
@@ -10,7 +11,9 @@ clave = None
 #f1.buscar_funcionario()
 #nombre= input ('nombre: ')
 #clave = input ('Clave: ')
-#f1 = Funcionario(nombre, 'Gimenez', 4785758, '17/07/2000', 'F' , 'CONTADOR','17/05/2016','252')
+f1 = Funcionario('Marcos', 'Gimenez', 4785758, '17/07/2000', 'F' , 'CONTADOR','17/05/2016','252')
+p= Persona('nombre','apellido','documento_identidad','fecha_nacimiento','sexo')
+#art = Articulo('asdffd','fasdf','asdfasd')
 #f1.cargar_funcionario(f1)
 #f1.buscar_funcionario(clave)
 #f1.buscar_funcionario()
@@ -43,7 +46,12 @@ for key in dbroot.keys():
         print ("CI: ", obj.documento_identidad)
         print ("Cargo: ", obj.cargo)
         print ("\n---------------------------------")
-        db.close()
+for key in dbroot.keys():
+    obj = dbroot[key]
+    print(key)
+    #del dbroot[key]
+    transaction.commit()
+db.close()
 #print (note.codigo)
 #dbroot[note.codigo]= note
 transaction.commit()
