@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from persona import Persona
 from persistence import MiZODB,transaction
-class Funcionario(metaclass=ABCMeta):
+class Funcionario(Persona,metaclass=ABCMeta):
     """docstring for Funcionario"""
     def __init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo):
         Persona.__init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo)
@@ -11,7 +11,7 @@ class Funcionario(metaclass=ABCMeta):
     def cargar_funcionario(self,f1):
         db=MiZODB()
         dbroot=db.raiz
-        print (self.codigo)
+        #print (self.codigo)
         dbroot[self.codigo]= f1
         transaction.commit()
         db.close()

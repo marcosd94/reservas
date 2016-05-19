@@ -2,8 +2,8 @@ from articulo import Articulo
 from reservable import Reservable
 class Notebook(Articulo,Reservable):
     """docstring for """
-    def __init__(self, reservas,fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso):
-        Articulo.__init__(self, reservas,fecha_reserva,Funcionario)
+    def __init__(self, reservas,fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso,reservado):
+        Articulo.__init__(self, reservas,fecha_reserva,Funcionario,reservado)
         self.descripcion= descripcion
         self.codigo= codigo
         self.fecha_ingreso= fecha_ingreso
