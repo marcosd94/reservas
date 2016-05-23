@@ -8,13 +8,6 @@ class Funcionario(Persona,metaclass=ABCMeta):
         self.cargo = cargo
         self.fecha_ingreso = fecha_ingreso
         self.codigo=codigo
-    def cargar_funcionario(self,f1):
-        db=MiZODB()
-        dbroot=db.raiz
-        #print (self.codigo)
-        dbroot[self.codigo]= f1
-        transaction.commit()
-        db.close()
     def buscar_funcionario(self):
         db = MiZODB()
         dbroot = db.raiz

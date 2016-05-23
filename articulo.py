@@ -2,8 +2,7 @@ from persistence import MiZODB,transaction
 from abc import ABCMeta, abstractmethod
 class Articulo(metaclass=ABCMeta):
     """docstring for """
-    def __init__(self, reservas,fecha_reserva,Funcionario,reservado):
-        self.reservas = reservas
+    def __init__(self,fecha_reserva,Funcionario,reservado):
         self.fecha_reserva=fecha_reserva
         self.funcionario = Funcionario
         self.reservado= reservado

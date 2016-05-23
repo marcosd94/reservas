@@ -35,7 +35,7 @@ def reservar():
         print ("Fecha de Ingreso: ", articulo.fecha_ingreso)
         print ("\n---------------------------------")
         db.close()
-reservar()
+#reservar()
 def cancelar():
     note = Notebook('si','16/05/2016',None,'Notebook DELL', '113', '12/04/2016', False)
     note.articulos_reservados()
@@ -55,4 +55,4 @@ def cancelar():
     print('\n')
     print('Los siguientes articulos se encuentran reservados')
     note.articulos_reservados()
-#cancelar()
+cancelar()
