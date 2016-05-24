@@ -2,10 +2,14 @@ from persistence import MiZODB,transaction
 from notebook import Notebook
 from roles import Administrador
 from roles import Gestor
+from roles import Reservas
 from usuario import Usuario
 from funcionario import Funcionario
 import os
 import subprocess
+import sys
+def limpiar():
+   subprocess.call("clear")
 
 
 def inicio(codigo):
@@ -15,16 +19,79 @@ def inicio(codigo):
         print( '1- Cargar Funcionario')
         print( '2- Cargar Articulo')
         print( '3- Reservar Articulo')
+        print( '4- Listar Funcionarios')
+        print( '5- Cancelar Reserva')
+        print( '6- Cerrar Sesión')
+        print( '7- Salir')
         tarea = input('Ingrese número de tarea: ')
         if(tarea=='1'):
+            limpiar()
             cargar_funcionario(codigo)
         elif(tarea=='2'):
+            limpiar()
             cargar_articulo(codigo)
         elif(tarea=='3'):
+            limpiar()
             cargar_reserva(codigo)
+        elif(tarea=='4'):
+            limpiar()
+            buscar_funcionario(codigo)
+        elif(tarea=='5'):
+            limpiar()
+            cancelar_reserva(codigo)
+        elif(tarea=='6'):
+            limpiar()
+            login()
+        elif(tarea=='7'):
+            sys.exit()
+        else:
+            print('Tarea no valida')
     elif isinstance(codigo, Gestor):
-        print('esta actividad es solo para Administradores')
-
+        print('\n     BIENVENIDO AL SISTEMA')
+        print ('ELIJA LA TAREA A EJECUTAR')
+        print( '1- Cargar Articulo')
+        print( '2- Reservar Articulo')
+        print( '3- Listar Funcionarios')
+        print( '4- Cancelar Reserva')
+        print( '5- Cerrar Sesión')
+        print( '6- Salir')
+        tarea = input('Ingrese número de tarea: ')
+        if(tarea=='1'):
+            limpiar()
+            cargar_articulo(codigo)
+        elif(tarea=='2'):
+            limpiar()
+            cargar_reserva(codigo)
+        elif(tarea=='3'):
+            limpiar()
+            buscar_funcionario(codigo)
+        elif(tarea=='4'):
+            limpiar()
+            cancelar_reserva(codigo)
+        elif(tarea=='5'):
+            limpiar()
+            login()
+        elif(tarea=='6'):
+            sys.exit()
+        else:
+            print('Tarea no valida')
+    elif isinstance(codigo, Reservas):
+        print('\n     BIENVENIDO AL SISTEMA')
+        print ('ELIJA LA TAREA A EJECUTAR')
+        print( '1- Reservar Articulo')
+        print( '2- Cerrar Sesión')
+        print( '3- Salir')
+        tarea = input('Ingrese número de tarea: ')
+        if(tarea=='1'):
+            limpiar()
+            cargar_reserva(codigo)
+        elif(tarea=='2'):
+            limpiar()
+            login()
+        elif(tarea=='3'):
+            sys.exit()
+        else:
+            print('Tarea no valida')
 def verificar(usu):
     try:
         dbroot[usu]
@@ -67,6 +134,12 @@ def cargar_funcionario(usu):
     contrasenha= input('Contraseña : ')
     if( rol == 'Gestor'):
         f1= Gestor(nombre, apellido, documento_identidad, fecha_nacimiento, sexo , cargo,fecha_ingreso,codigo, usuario, contrasenha)
+        dbroot[f1.usuario]= f1
+    elif(rol=='Administrador'):
+        f1= Administrador(nombre, apellido, documento_identidad, fecha_nacimiento, sexo , cargo,fecha_ingreso,codigo, usuario, contrasenha)
+        dbroot[f1.usuario]= f1
+    elif(rol=='Reservas'):
+        f1= Reservas(nombre, apellido, documento_identidad, fecha_nacimiento, sexo , cargo,fecha_ingreso,codigo, usuario, contrasenha)
         dbroot[f1.usuario]= f1
     else:
         print('No existe el Rol indicado')
@@ -142,27 +215,27 @@ def buscar_funcionario(codigo):
             print ("\n---------------------------------")
             db.close()
     inicio(codigo)
-def inicio(codigo):
-    if isinstance(codigo, Administrador):
-        print('\n     BIENVENIDO AL SISTEMA')
-        print ('ELIJA LA TAREA A EJECUTAR')
-        print( '1- Cargar Funcionario')
-        print( '2- Cargar Articulo')
-        print( '3- Reservar Articulo')
-        print( '4- Listar Funcionarios')
-        tarea = input('Ingrese número de tarea: ')
-        if(tarea=='1'):
-            cargar_funcionario(codigo)
-        elif(tarea=='2'):
-            cargar_articulo(codigo)
-        elif(tarea=='3'):
-            cargar_reserva(codigo)
-        elif(tarea=='4'):
-            subprocess.call("clear")
-            buscar_funcionario(codigo)
-    elif isinstance(codigo, Gestor):
-        print('esta actividad es solo para Administradores')
-        #reservar()
+def cancelar_reserva(codigo):
+    note = Notebook('16/05/2016',None,'Notebook DELL', '113', '12/04/2016', False)
+    print('ARTICULOS RESERVADOS: ')
+    print ("\n---------------------------------")
+    note.articulos_reservados()
+    equipo= input( 'Ingresar codigo de Equipo a Cancelar: ')
+    db=MiZODB()
+    dbroot=db.raiz
+    articulo= dbroot[equipo]
+    if (articulo.reservado == True):
+        articulo.reservado=False
+        dbroot[equipo]=articulo
+        transaction.commit()
+        print ('Articulo liberado con exito')
+    else:
+        print('El articulo se encuentra libre')
+    db.close()
+    #print('\n')
+    #print('Los siguientes articulos se encuentran reservados')
+    #note.articulos_reservados()
+    inicio(codigo)
 def login():
     print('******** BIENVENIDOS AL SISTEMA DE RESERVAS ********')
     print('INICIAR SESION')
