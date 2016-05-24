@@ -8,21 +8,23 @@ from funcionario import Funcionario
 import os
 import subprocess
 import sys
+
 def limpiar():
    subprocess.call("clear")
 
 
 def inicio(codigo):
     if isinstance(codigo, Administrador):
-        print('\n     BIENVENIDO AL SISTEMA')
-        print ('ELIJA LA TAREA A EJECUTAR')
+        print('\n*******BIENVENIDO AL SISTEMA*******')
+        print ('    ELIJA LA TAREA A EJECUTAR')
         print( '1- Cargar Funcionario')
         print( '2- Cargar Articulo')
         print( '3- Reservar Articulo')
         print( '4- Listar Funcionarios')
         print( '5- Cancelar Reserva')
-        print( '6- Cerrar Sesión')
-        print( '7- Salir')
+        print( '6- Eliminar Funcionario')
+        print( '7- Cerrar Sesión')
+        print( '8- Salir')
         tarea = input('Ingrese número de tarea: ')
         if(tarea=='1'):
             limpiar()
@@ -41,14 +43,17 @@ def inicio(codigo):
             cancelar_reserva(codigo)
         elif(tarea=='6'):
             limpiar()
-            login()
+            eliminar_funcionario(codigo)
         elif(tarea=='7'):
+            limpiar()
+            login()
+        elif(tarea=='8'):
             sys.exit()
         else:
             print('Tarea no valida')
     elif isinstance(codigo, Gestor):
-        print('\n     BIENVENIDO AL SISTEMA')
-        print ('ELIJA LA TAREA A EJECUTAR')
+        print('\n*******BIENVENIDO AL SISTEMA*******')
+        print ('    ELIJA LA TAREA A EJECUTAR')
         print( '1- Cargar Articulo')
         print( '2- Reservar Articulo')
         print( '3- Listar Funcionarios')
@@ -76,8 +81,8 @@ def inicio(codigo):
         else:
             print('Tarea no valida')
     elif isinstance(codigo, Reservas):
-        print('\n     BIENVENIDO AL SISTEMA')
-        print ('ELIJA LA TAREA A EJECUTAR')
+        print('\n*******BIENVENIDO AL SISTEMA*******')
+        print ('    ELIJA LA TAREA A EJECUTAR')
         print( '1- Reservar Articulo')
         print( '2- Cerrar Sesión')
         print( '3- Salir')
@@ -184,9 +189,9 @@ def cargar_reserva(codigo):
         articulo.funcionario= codigo
         articulo.reservado=True
         dbroot[equipo]=articulo
-    #    dbroot._p_changed=True
         transaction.commit()
         print ('Articulo reservado con exito por: ', articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
+        db.close()
         inicio(codigo)
     else:
         print ('El articulo esta reservado por:')
@@ -208,7 +213,8 @@ def buscar_funcionario(codigo):
     for key in dbroot.keys():
         obj = dbroot[key]
         if isinstance(obj, Funcionario):
-            print ( "Clave: ", key)
+            print ( "Usuario: ", key)
+            print("Codigo: ", obj.codigo)
             print ("Funcionario: ", obj.nombres,obj.apellidos)
             print ("CI: ", obj.documento_identidad)
             print ("Cargo: ", obj.cargo)
@@ -235,6 +241,20 @@ def cancelar_reserva(codigo):
     #print('\n')
     #print('Los siguientes articulos se encuentran reservados')
     #note.articulos_reservados()
+    inicio(codigo)
+
+def eliminar_funcionario(codigo):
+    print('     ELIMINAR FUNCIONARIOS')
+    existe= True
+    while(existe):
+        clave= input('Ingrese codigo del funcionario a Eliminar: ')
+        existe=existe_usu(clave)
+    db = MiZODB()
+    dbroot = db.raiz
+    del dbroot[clave]
+    transaction.commit()
+    db.close()
+    print('Funcionario eliminado con existo')
     inicio(codigo)
 def login():
     print('******** BIENVENIDOS AL SISTEMA DE RESERVAS ********')
