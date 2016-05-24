@@ -8,9 +8,9 @@ class Administrador(Usuario):
     def cargar_funcionario(self,f1):
         db=MiZODB()
         dbroot=db.raiz
-        rol= input('Ingrese Rol del Funcionario: ')
-        if( rol == 'Gestor'):
-            f1= Gestor('Maria', 'Gonzalez', 4776313, '17/07/2000', 'M' , 'PRUEBA','17/05/2016','004', 'mgonzalez', 'contrasenha')
+        #rol= input('Ingrese Rol del Funcionario: ')
+        #if( rol == 'Gestor'):
+        #    f1= Gestor('Maria', 'Gonzalez', 4776313, '17/07/2000', 'M' , 'PRUEBA','17/05/2016','004', 'mgonzalez', 'contrasenha')
         dbroot[f1.usuario]= f1
         transaction.commit()
         db.close()

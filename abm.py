@@ -5,6 +5,8 @@ from persona import Persona
 from proyector import Proyector
 from articulo import Articulo
 from roles import Administrador
+import os
+import subprocess
 nombre = None
 clave = None
 #clave= input ('Ingrese la clave del usuario: ')
@@ -20,19 +22,19 @@ clave = None
 #f1.buscar_funcionario()
 #f1.eliminar_funcionario(clave)
 #usu = Usuario('marcos', 'peralta', 2354345, '17/07/2000', 'M' , 'DESARROLLADOR','17/05/2016','002', 'mperalta', 'contrasenha')
-roles = Administrador('Jose', 'Paredes', 34563456, '17/07/2000', 'M' , 'CONTADOR','17/05/2016','003', 'jparedes', 'contrasenha')
+#roles = Administrador('Jose', 'Paredes', 34563456, '17/07/2000', 'M' , 'CONTADOR','17/05/2016','003', 'jparedes', 'contrasenha')
 #roles.cargar_funcionario(roles)
-roles.buscar_funcionario()
+#roles.buscar_funcionario()
 #note = Notebook('si','16/05/2016','Marcos Peralta','Notebook HP', '252', '12/04/2016')
 db=MiZODB()
 dbroot=db.raiz
-try:
-    dbroot['mperalta']
-    db.close()
-except:
-    print ('no existe usuario')
-else:
-    print('el usuario ya exite')
+#try:
+#    dbroot['mperalta']
+#    db.close()
+#except:
+#    print ('no existe usuario')
+#else:
+#    print('el usuario ya exite')
 #note = Notebook('16/05/2016',None,'Notebook DELL', '101', '12/04/2016', False)
 #dbroot[note.codigo]= note
 #del dbroot['001']
@@ -42,5 +44,6 @@ else:
 #del dbroot['001']
 transaction.commit()
 db.close()
-#print (note.codigo)
+print ("prueba\n"*10)
+subprocess.call("clear")
 #dbroot[note.codigo]= note
