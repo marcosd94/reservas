@@ -6,6 +6,7 @@ from roles import Reservas
 from usuario import Usuario
 from funcionario import Funcionario
 from dependencia import Dependencia
+from articulo import Articulo
 import os
 import subprocess
 import sys
@@ -19,56 +20,63 @@ def inicio(codigo):
         print('\n*******BIENVENIDO AL SISTEMA*******')
         print ('    ELIJA LA TAREA A EJECUTAR')
         print( '1- Cargar Funcionario')
-        print( '2- Cargar Articulo')
-        print( '3- Reservar Articulo')
-        print( '4- Listar Funcionarios')
-        print( '5- Cancelar Reserva')
-        print( '6- Eliminar Funcionario')
-        print( '7- Crear Dependencia')
-        print( '8- Listar Dependencias')
-        print( '9- Cerrar Sesión')
-        print( '10- Salir')
+        print( '2- Listar Funcionarios')
+        print( '3- Eliminar Funcionario')
+        print( '4- Cargar Articulo')
+        print( '5- Listar Articulos')
+        print( '6- Reservar Articulo')
+        print( '7- Cancelar Reserva')
+        print( '8- Crear Dependencia')
+        print( '9- Listar Dependencias')
+        print( '10- Cerrar Sesión')
+        print( '11- Salir')
         tarea = input('Ingrese número de tarea: ')
         if(tarea=='1'):
             limpiar()
             cargar_funcionario(codigo)
         elif(tarea=='2'):
             limpiar()
-            cargar_articulo(codigo)
+            listar_funcionarios(codigo)
         elif(tarea=='3'):
             limpiar()
-            cargar_reserva(codigo)
+            eliminar_funcionario(codigo)
         elif(tarea=='4'):
             limpiar()
-            buscar_funcionario(codigo)
+            cargar_articulo(codigo)
         elif(tarea=='5'):
             limpiar()
-            cancelar_reserva(codigo)
+            listar_articulos(codigo)
         elif(tarea=='6'):
             limpiar()
-            eliminar_funcionario(codigo)
+            cargar_reserva(codigo)
         elif(tarea=='7'):
             limpiar()
-            crear_dependencia(codigo)
+            cancelar_reserva(codigo)
         elif(tarea=='8'):
             limpiar()
-            listar_dependencia(codigo)
+            crear_dependencia(codigo)
         elif(tarea=='9'):
             limpiar()
-            login()
+            listar_dependencia(codigo)
         elif(tarea=='10'):
+            limpiar()
+            login()
+        elif(tarea=='11'):
             sys.exit()
         else:
-            print('Tarea no valida')
+            limpiar()
+            print('Tarea no valida!!')
+            inicio(codigo)
     elif isinstance(codigo, Gestor):
         print('\n*******BIENVENIDO AL SISTEMA*******')
         print ('    ELIJA LA TAREA A EJECUTAR')
         print( '1- Cargar Articulo')
         print( '2- Reservar Articulo')
-        print( '3- Listar Funcionarios')
-        print( '4- Cancelar Reserva')
-        print( '5- Cerrar Sesión')
-        print( '6- Salir')
+        print( '3- Cancelar Reserva')
+        print( '4- Listar Articulos')
+        print( '5- Listar Funcionarios')
+        print( '6- Cerrar Sesión')
+        print( '7- Salir')
         tarea = input('Ingrese número de tarea: ')
         if(tarea=='1'):
             limpiar()
@@ -78,17 +86,22 @@ def inicio(codigo):
             cargar_reserva(codigo)
         elif(tarea=='3'):
             limpiar()
-            buscar_funcionario(codigo)
-        elif(tarea=='4'):
-            limpiar()
             cancelar_reserva(codigo)
+        elif(tarea=='4'):
+            listar_articulos(codigo)
+            limpiar()
         elif(tarea=='5'):
             limpiar()
-            login()
+            listar_funcionarios(codigo)
         elif(tarea=='6'):
+            limpiar()
+            login()
+        elif(tarea=='7'):
             sys.exit()
         else:
-            print('Tarea no valida')
+            limpiar()
+            print('Tarea no valida!!')
+            inicio(codigo)
     elif isinstance(codigo, Reservas):
         print('\n*******BIENVENIDO AL SISTEMA*******')
         print ('    ELIJA LA TAREA A EJECUTAR')
@@ -105,7 +118,9 @@ def inicio(codigo):
         elif(tarea=='3'):
             sys.exit()
         else:
-            print('Tarea no valida')
+            limpiar()
+            print('Tarea no valida!!')
+            inicio(codigo)
 def verificar(usu):
     try:
         dbroot[usu]
@@ -124,11 +139,35 @@ def existe_usu(usu):
         db.close()
     except:
         print ('El usuario no existe. Favor verificar')
-        return True
         db.close()
+        return True
     else:
         return False
-
+def verificar_art(codigo):
+        try:
+            db=MiZODB()
+            dbroot=db.raiz
+            dbroot[codigo]
+            db.close()
+        except:
+            print ('Codigo de articulo ingresado válido')
+            db.close()
+            return False
+        else:
+            print('El codigo de articulo ya existe, vuelva a ingresar usuario')
+            return True
+def existe_art(codigo):
+        try:
+            db=MiZODB()
+            dbroot=db.raiz
+            dbroot[codigo]
+            db.close()
+        except:
+            print ('Articulo ingresado no existe. Favor verificar')
+            db.close()
+            return True
+        else:
+            return False
 def cargar_funcionario(usu):
     db=MiZODB()
     dbroot=db.raiz
@@ -140,7 +179,6 @@ def cargar_funcionario(usu):
     sexo= input('Sexo: ')
     cargo= input('Cargo : ')
     dep=dbroot[input('Dependencia : ')]
-
     fecha_ingreso= input('Fecha de ingreso : ')
     codigo= input('Codigo : ')
     free=True
@@ -164,58 +202,61 @@ def cargar_funcionario(usu):
     db.close()
     inicio(usu)
 
-def cargar_articulo(codigo):
-    db=MiZODB()
-    dbroot=db.raiz
+def cargar_articulo(usu):
+    free=True
     fecha_reserva=input('Ingrese fecha de reserva: ')
     Funcionario=None
     descripcion=input('Ingrese descripcion del articulo: ')
-    codigo=input('Ingrese codigo unico del articulo: ')
+    while(free):
+        codigo=input('Ingrese codigo unico del articulo: ')
+        free= verificar_art(codigo)
     fecha_ingreso=input('Ingrese fecha de alta del articulo: ')
     reservado= False
     tipo=input('Tipo de Equipo: ')
     if( tipo == 'Notebook'):
+        db=MiZODB()
+        dbroot=db.raiz
         art= Notebook(fecha_reserva, Funcionario, descripcion, codigo, fecha_ingreso , reservado)
         dbroot[art.codigo]= art
+        transaction.commit()
+        print('Articulo: ', art.descripcion,' cargado con exito')
+        db.close()
+        inicio(usu)
     else:
         print('No existe el Tipo de articulo indicado')
-    transaction.commit()
-    print('Articulo cargado con exito')
-    db.close()
-    inicio(codigo)
+        inicio(usu)
 
 def cargar_reserva(codigo):
     print ('        RESERVAR EQUIPOS')
     print ("\n---------------------------------")
-    print ('        LISTA DE EQUIPOS')
-    print ("\n---------------------------------")
-    note = Notebook('16/05/2016',None,'Notebook DELL', '113', '12/04/2016', False)
-    note.listar_articulos()
-    equipo= input( 'Ingresar codigo de Equipo a Reservar: ')
-    print ("\n---------------------------------")
-    db=MiZODB()
-    dbroot=db.raiz
-    articulo= dbroot[equipo]
-    if (articulo.reservado == False):
-        articulo.funcionario= codigo
-        articulo.reservado=True
-        dbroot[equipo]=articulo
-        transaction.commit()
-        print ('Articulo reservado con exito por: ', articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
-        db.close()
-        inicio(codigo)
-    else:
-        print ('El articulo esta reservado por:')
-        print ( "Clave Articulo: ", equipo)
-        print( "Clave Funcionario: ", articulo.funcionario.codigo)
-        print ("Funcionario: ", articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
-        print ("Descripcion:  ", articulo.descripcion)
-        print ("Fecha de Ingreso: ", articulo.fecha_ingreso)
+    while(True):
+        free=True
+        while(free):
+            equipo= input( 'Ingresar codigo de Equipo a Reservar: ')
+            free= existe_art(equipo)
         print ("\n---------------------------------")
-        db.close()
-        inicio(codigo)
+        db=MiZODB()
+        dbroot=db.raiz
+        articulo= dbroot[equipo]
+        if (articulo.reservado == False):
+            articulo.funcionario= codigo
+            articulo.reservado=True
+            dbroot[equipo]=articulo
+            transaction.commit()
+            print ('Articulo: ',articulo.descripcion,' reservado con exito por: ', articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
+            db.close()
+            inicio(codigo)
+        else:
+            print ('El articulo esta reservado por:')
+            print ( "Clave Articulo: ", equipo)
+            print( "Clave Funcionario: ", articulo.funcionario.codigo)
+            print ("Funcionario: ", articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
+            print ("Descripcion:  ", articulo.descripcion)
+            print ("Fecha de Ingreso: ", articulo.fecha_ingreso)
+            print ("\n---------------------------------")
+            db.close()
 
-def buscar_funcionario(codigo):
+def listar_funcionarios(codigo):
     db = MiZODB()
     dbroot = db.raiz
     os.system('clear')
@@ -237,19 +278,25 @@ def cancelar_reserva(codigo):
     note = Notebook('16/05/2016',None,'Notebook DELL', '113', '12/04/2016', False)
     print('ARTICULOS RESERVADOS: ')
     print ("\n---------------------------------")
-    note.articulos_reservados()
-    equipo= input( 'Ingresar codigo de Equipo a Cancelar: ')
-    db=MiZODB()
-    dbroot=db.raiz
-    articulo= dbroot[equipo]
-    if (articulo.reservado == True):
-        articulo.reservado=False
-        dbroot[equipo]=articulo
-        transaction.commit()
-        print ('Articulo liberado con exito')
+    art=note.articulos_reservados()
+    if(art>0):
+        free=True
+        while(free):
+            equipo= input( 'Ingresar codigo de Equipo a Cancelar: ')
+            free= existe_art(equipo)
+        db=MiZODB()
+        dbroot=db.raiz
+        articulo= dbroot[equipo]
+        if (articulo.reservado == True):
+            articulo.reservado=False
+            dbroot[equipo]=articulo
+            transaction.commit()
+            print ('Articulo: ',articulo.descripcion,' liberado con exito')
+        else:
+            print('El articulo: ',articulo.descripcion,' se encuentra libre')
+        db.close()
     else:
-        print('El articulo se encuentra libre')
-    db.close()
+        print('Ningun articulo se encuentra reservado')
     #print('\n')
     #print('Los siguientes articulos se encuentran reservados')
     #note.articulos_reservados()
@@ -297,6 +344,25 @@ def listar_dependencia(codigo):
             else:
                 print ("Activo: NO")
             print ("\n---------------------------------")
+    db.close()
+    inicio(codigo)
+
+def listar_articulos(codigo):
+    print ('        LISTA DE EQUIPOS')
+    print ("\n---------------------------------")
+    db = MiZODB()
+    dbroot = db.raiz
+    for key in dbroot.keys():
+        obj = dbroot[key]
+        if isinstance(obj, Articulo):
+            print ("Clave del Articulo: ", key)
+            print ("Descripcion: ", obj.descripcion)
+            if(obj.reservado==True):
+                print ("Reservado: SI")
+            else:
+                print ("Reservado: NO")
+            print ("\n---------------------------------")
+    transaction.commit()
     db.close()
     inicio(codigo)
 def login():
