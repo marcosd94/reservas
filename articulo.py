@@ -40,22 +40,24 @@ class Articulo(metaclass=ABCMeta):
                     count+=1
                     print ("Clave del Articulo: ", key)
                     print ("Descripcion: ", obj.descripcion)
-                    print ("Reservado: SI")
+                    print ("Reservado: SI, en fecha: ", obj.fecha_reserva)
                     print ("\n---------------------------------")
         transaction.commit()
         db.close()
         return count
-    def cant_articulos():
-            db = MiZODB()
-            dbroot = db.raiz
-            for key in dbroot.keys():
-                obj = dbroot[key]
-                if isinstance(obj, Articulo):
-
-                    if(obj.reservado==True):
-                        print ("Clave del Articulo: ", key)
-                        print ("Descripcion: ", obj.descripcion)
-                        print ("Reservado: SI")
+    def articulos_libres(self):
+        db = MiZODB()
+        dbroot = db.raiz
+        count=0
+        for key in dbroot.keys():
+            obj = dbroot[key]
+            if isinstance(obj, Articulo):
+                if(obj.reservado==False):
+                    count+=1
+                    print ("Clave del Articulo: ", key)
+                    print ("Descripcion: ", obj.descripcion)
+                    print ("Reservado: NO")
                     print ("\n---------------------------------")
-            transaction.commit()
-            db.close()
+        transaction.commit()
+        db.close()
+        return count

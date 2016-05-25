@@ -1,5 +1,7 @@
 from persistence import MiZODB,transaction
 from notebook import Notebook
+from multiple import MultipleElectrico
+from proyector import Proyector
 from roles import Administrador
 from roles import Gestor
 from roles import Reservas
@@ -7,14 +9,12 @@ from usuario import Usuario
 from funcionario import Funcionario
 from dependencia import Dependencia
 from articulo import Articulo
-import os
+import datetime
 import subprocess
 import sys
 
 def limpiar():
    subprocess.call("clear")
-
-
 def inicio(codigo):
     if isinstance(codigo, Administrador):
         print('\n*******BIENVENIDO AL SISTEMA*******')
@@ -168,9 +168,35 @@ def existe_art(codigo):
             return True
         else:
             return False
+def verificar_dep(codigo):
+        try:
+            db=MiZODB()
+            dbroot=db.raiz
+            dbroot[codigo]
+            db.close()
+        except:
+            print ('Codigo corto de dependencia ingresado válido')
+            db.close()
+            return False
+        else:
+            print('El Codigo corto de dependencia ya existe, vuelva a ingresar usuario')
+            return True
+def existe_dep(codigo):
+        try:
+            db=MiZODB()
+            dbroot=db.raiz
+            dbroot[codigo]
+            db.close()
+        except:
+            print ('Dependencia ingresada no existe. Favor verificar')
+            db.close()
+            return True
+        else:
+            return False
 def cargar_funcionario(usu):
-    db=MiZODB()
-    dbroot=db.raiz
+    print('\n     CARGA DE FUNCIONARIOS')
+    print ("---------------------------------")
+    print('ROLES:\n-Administrador\n-Gestor\n-Reservas')
     rol= input('Ingrese Rol del Funcionario: ')
     nombre= input('Nombres: ')
     apellido= input('Apellidos: ')
@@ -178,7 +204,14 @@ def cargar_funcionario(usu):
     fecha_nacimiento = input('Fecha de Nacimiento: ')
     sexo= input('Sexo: ')
     cargo= input('Cargo : ')
-    dep=dbroot[input('Dependencia : ')]
+    dependencias_activas()
+    dep_existe=True
+    while(dep_existe):
+        dep=input('Dependencia : ')
+        dep_existe=existe_dep(dep)
+    db=MiZODB()
+    dbroot=db.raiz
+    dep= dbroot[dep]
     fecha_ingreso= input('Fecha de ingreso : ')
     codigo= input('Codigo : ')
     free=True
@@ -201,22 +234,41 @@ def cargar_funcionario(usu):
     print('Funcionario cargado con exito')
     db.close()
     inicio(usu)
-
 def cargar_articulo(usu):
     free=True
-    fecha_reserva=input('Ingrese fecha de reserva: ')
     Funcionario=None
+    print('\n     CARGA DE ARTICULOS')
+    print ("---------------------------------")
     descripcion=input('Ingrese descripcion del articulo: ')
     while(free):
         codigo=input('Ingrese codigo unico del articulo: ')
         free= verificar_art(codigo)
     fecha_ingreso=input('Ingrese fecha de alta del articulo: ')
     reservado= False
+    print('Tipos:\n-Notebook\n-Proyector\n-Multiple')
     tipo=input('Tipo de Equipo: ')
     if( tipo == 'Notebook'):
         db=MiZODB()
         dbroot=db.raiz
-        art= Notebook(fecha_reserva, Funcionario, descripcion, codigo, fecha_ingreso , reservado)
+        art= Notebook(None, Funcionario, descripcion, codigo, fecha_ingreso , reservado)
+        dbroot[art.codigo]= art
+        transaction.commit()
+        print('Articulo: ', art.descripcion,' cargado con exito')
+        db.close()
+        inicio(usu)
+    elif( tipo == 'Proyector'):
+        db=MiZODB()
+        dbroot=db.raiz
+        art= Proyector(None, Funcionario, descripcion, codigo, fecha_ingreso , reservado)
+        dbroot[art.codigo]= art
+        transaction.commit()
+        print('Articulo: ', art.descripcion,' cargado con exito')
+        db.close()
+        inicio(usu)
+    elif( tipo == 'Multiple'):
+        db=MiZODB()
+        dbroot=db.raiz
+        art= MultipleElectrico(None, Funcionario, descripcion, codigo, fecha_ingreso , reservado)
         dbroot[art.codigo]= art
         transaction.commit()
         print('Articulo: ', art.descripcion,' cargado con exito')
@@ -225,57 +277,75 @@ def cargar_articulo(usu):
     else:
         print('No existe el Tipo de articulo indicado')
         inicio(usu)
-
 def cargar_reserva(codigo):
-    print ('        RESERVAR EQUIPOS')
+    print ('*******RESERVAR EQUIPOS*******')
     print ("\n---------------------------------")
-    while(True):
-        free=True
-        while(free):
-            equipo= input( 'Ingresar codigo de Equipo a Reservar: ')
-            free= existe_art(equipo)
-        print ("\n---------------------------------")
-        db=MiZODB()
-        dbroot=db.raiz
-        articulo= dbroot[equipo]
-        if (articulo.reservado == False):
-            articulo.funcionario= codigo
-            articulo.reservado=True
-            dbroot[equipo]=articulo
-            transaction.commit()
-            print ('Articulo: ',articulo.descripcion,' reservado con exito por: ', articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
-            db.close()
-            inicio(codigo)
-        else:
-            print ('El articulo esta reservado por:')
-            print ( "Clave Articulo: ", equipo)
-            print( "Clave Funcionario: ", articulo.funcionario.codigo)
-            print ("Funcionario: ", articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
-            print ("Descripcion:  ", articulo.descripcion)
-            print ("Fecha de Ingreso: ", articulo.fecha_ingreso)
+    note = Notebook(None,None,None, None, None, None)
+    print('*******ARTICULOS LIBRES******* ')
+    art=note.articulos_libres()
+    if(art>0):
+        while(True):
+            free=True
+            while(free):
+                equipo= input( 'Ingresar codigo de Equipo a Reservar: ')
+                free= existe_art(equipo)
             print ("\n---------------------------------")
-            db.close()
-
+            db=MiZODB()
+            dbroot=db.raiz
+            articulo= dbroot[equipo]
+            if (articulo.reservado == False):
+                articulo.funcionario= codigo
+                articulo.reservado=True
+                articulo.fecha_reserva= datetime.datetime.now()
+                dbroot[equipo]=articulo
+                transaction.commit()
+                print ('Articulo: ',articulo.descripcion,' reservado con exito por: ', articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
+                db.close()
+                inicio(codigo)
+            else:
+                print ('El articulo esta reservado por:')
+                print ( "Clave Articulo: ", equipo)
+                print( "Clave Funcionario: ", articulo.funcionario.codigo)
+                print ("Funcionario: ", articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
+                print ("Descripcion:  ", articulo.descripcion)
+                print ("Fecha de Ingreso: ", articulo.fecha_ingreso)
+                print ("\n---------------------------------")
+                db.close()
+    else:
+        print('Todos los articulos se encuentran reservados')
+        inicio(codigo)
 def listar_funcionarios(codigo):
     db = MiZODB()
     dbroot = db.raiz
-    os.system('clear')
     print('\n     LISTADO DE FUNCIONARIOS')
     print ("---------------------------------")
     for key in dbroot.keys():
         obj = dbroot[key]
         if isinstance(obj, Funcionario):
-            print ( "Usuario: ", key)
+            print ("Usuario: ", key)
             print("Codigo: ", obj.codigo)
             print ("Funcionario: ", obj.nombres,obj.apellidos)
             print ("CI: ", obj.documento_identidad)
             print ("Dependencia: ", obj.dependencia.nombre_dependencia)
-            print ("Cargo: ", obj.cargo)
+            print ("Cargo: ", obj.cargo, " Rol: ",obj.rol)
             print ("\n---------------------------------")
             db.close()
     inicio(codigo)
+def funcionarios_activos():
+    db = MiZODB()
+    dbroot = db.raiz
+    print('\n     FUNCIONARIOS ACTIVOS')
+    print ("---------------------------------")
+    for key in dbroot.keys():
+        obj = dbroot[key]
+        if isinstance(obj, Funcionario):
+            print ("Usuario: ", key)
+            print ("Funcionario: ", obj.nombres,obj.apellidos)
+            print ("CI: ", obj.documento_identidad)
+            print ("\n---------------------------------")
+            db.close()
 def cancelar_reserva(codigo):
-    note = Notebook('16/05/2016',None,'Notebook DELL', '113', '12/04/2016', False)
+    note = Notebook(None,None,None, None, None, None)
     print('ARTICULOS RESERVADOS: ')
     print ("\n---------------------------------")
     art=note.articulos_reservados()
@@ -289,6 +359,8 @@ def cancelar_reserva(codigo):
         articulo= dbroot[equipo]
         if (articulo.reservado == True):
             articulo.reservado=False
+            articulo.fecha_reserva= None
+            articulo.funcionario=None
             dbroot[equipo]=articulo
             transaction.commit()
             print ('Articulo: ',articulo.descripcion,' liberado con exito')
@@ -301,9 +373,9 @@ def cancelar_reserva(codigo):
     #print('Los siguientes articulos se encuentran reservados')
     #note.articulos_reservados()
     inicio(codigo)
-
 def eliminar_funcionario(codigo):
-    print('     ELIMINAR FUNCIONARIOS')
+    print('*******ELIMINAR FUNCIONARIOS********')
+    funcionarios_activos()
     existe= True
     while(existe):
         clave= input('Ingrese codigo del funcionario a Eliminar: ')
@@ -316,18 +388,23 @@ def eliminar_funcionario(codigo):
     print('Funcionario eliminado con existo')
     inicio(codigo)
 def crear_dependencia(codigo):
-        db=MiZODB()
-        dbroot=db.raiz
-        nombre_dependencia=input('Ingrese nombre de la dependencia: ')
+    print(' *******CARGAR DEPENDENCIAS********')
+    print ("---------------------------------")
+    free=True
+    nombre_dependencia=input('Ingrese nombre de la dependencia: ')
+    while(free):
         codigo_corto=input('Ingrese codigo corto de la dependencia: ')
-        fecha_creacion=input('Ingrese fecha de creación: ')
-        activo=True
-        dep= Dependencia(nombre_dependencia,codigo_corto, fecha_creacion,activo)
-        dbroot[dep.codigo_corto]= dep
-        transaction.commit()
-        print('Dependencia creada con exito')
-        db.close()
-        inicio(codigo)
+        free=verificar_dep(codigo_corto)
+    fecha_creacion=input('Ingrese fecha de creación: ')
+    activo=True
+    dep= Dependencia(nombre_dependencia,codigo_corto, fecha_creacion,activo)
+    db=MiZODB()
+    dbroot=db.raiz
+    dbroot[dep.codigo_corto]= dep
+    transaction.commit()
+    print('Dependencia creada con exito')
+    db.close()
+    inicio(codigo)
 def listar_dependencia(codigo):
     db = MiZODB()
     dbroot = db.raiz
@@ -346,7 +423,18 @@ def listar_dependencia(codigo):
             print ("\n---------------------------------")
     db.close()
     inicio(codigo)
-
+def dependencias_activas():
+    db = MiZODB()
+    dbroot = db.raiz
+    print('\n     DEPENDENCIAS ACTIVAS')
+    print ("---------------------------------")
+    for key in dbroot.keys():
+        obj = dbroot[key]
+        if isinstance(obj, Dependencia):
+            print ( "Codigo corto de la dependencia: ", key)
+            print ("Nombre de la Dependencia: ", obj.nombre_dependencia)
+            print ("\n---------------------------------")
+    db.close()
 def listar_articulos(codigo):
     print ('        LISTA DE EQUIPOS')
     print ("\n---------------------------------")
@@ -358,7 +446,7 @@ def listar_articulos(codigo):
             print ("Clave del Articulo: ", key)
             print ("Descripcion: ", obj.descripcion)
             if(obj.reservado==True):
-                print ("Reservado: SI")
+                print ("Reservado: SI, en fecha: ", obj.fecha_reserva)
             else:
                 print ("Reservado: NO")
             print ("\n---------------------------------")

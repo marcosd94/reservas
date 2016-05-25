@@ -4,7 +4,7 @@ class Administrador(Usuario):
     """docstring for """
     def __init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo,usuario,password,Dependencia):
         Usuario.__init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo,usuario,password,Dependencia)
-
+        self.rol='Administrador'
     def cargar_funcionario(self,f1):
         db=MiZODB()
         dbroot=db.raiz
@@ -18,8 +18,9 @@ class Gestor(Usuario):
     """docstring for """
     def __init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo,usuario,password,Dependencia):
         Usuario.__init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo,usuario,password,Dependencia)
-
+        self.rol='Gestor'
 class Reservas(Usuario):
     """docstring for """
     def __init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo,usuario,password,Dependencia):
         Usuario.__init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo,usuario,password,Dependencia)
+        self.rol='Reservas'
