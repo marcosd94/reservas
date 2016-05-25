@@ -3,11 +3,12 @@ from persona import Persona
 from persistence import MiZODB,transaction
 class Funcionario(Persona,metaclass=ABCMeta):
     """docstring for Funcionario"""
-    def __init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo):
+    def __init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo,Dependencia):
         Persona.__init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo)
         self.cargo = cargo
         self.fecha_ingreso = fecha_ingreso
         self.codigo=codigo
+        self.dependencia=Dependencia
     def buscar_funcionario(self):
         db = MiZODB()
         dbroot = db.raiz
