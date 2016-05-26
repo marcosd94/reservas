@@ -9,6 +9,7 @@ from usuario import Usuario
 from funcionario import Funcionario
 from dependencia import Dependencia
 from articulo import Articulo
+from controlador_articulo import ControladorArticulo
 import datetime
 import subprocess
 import sys
@@ -293,10 +294,9 @@ def cargar_reserva(codigo):
             db=MiZODB()
             dbroot=db.raiz
             articulo= dbroot[equipo]
-            if (articulo.reservado == False):
-                articulo.funcionario= codigo
-                articulo.reservado=True
-                articulo.fecha_reserva= datetime.datetime.now()
+            controller=ControladorArticulo()
+            if (controller.articulo_libre(articulo)):
+                controller.reservar_articulo(articulo,codigo)
                 dbroot[equipo]=articulo
                 transaction.commit()
                 print ('Articulo: ',articulo.descripcion,' reservado con exito por: ', articulo.funcionario.nombres, articulo.funcionario.apellidos, " CI: ", articulo.funcionario.documento_identidad)
@@ -357,10 +357,9 @@ def cancelar_reserva(codigo):
         db=MiZODB()
         dbroot=db.raiz
         articulo= dbroot[equipo]
-        if (articulo.reservado == True):
-            articulo.reservado=False
-            articulo.fecha_reserva= None
-            articulo.funcionario=None
+        controller=ControladorArticulo()
+        if (controller.articulo_reservado(articulo)):
+            articulo= controller.cancelar_reserva(articulo)
             dbroot[equipo]=articulo
             transaction.commit()
             print ('Articulo: ',articulo.descripcion,' liberado con exito')

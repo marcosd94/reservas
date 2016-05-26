@@ -1,7 +1,8 @@
 from persistence import MiZODB,transaction
 from abc import ABCMeta, abstractmethod
+import datetime
 class Articulo(metaclass=ABCMeta):
-    """docstring for """
+    """Clase Articulo, la cual se encarga de guardar los datos basico de los articulos que se tienen en la Institucion"""
     def __init__(self,fecha_reserva,Funcionario,reservado):
         self.fecha_reserva=fecha_reserva
         self.funcionario = Funcionario
@@ -61,3 +62,12 @@ class Articulo(metaclass=ABCMeta):
         transaction.commit()
         db.close()
         return count
+    def reservar_articulo(self,codigo):
+        self.funcionario= codigo
+        self.reservado=True
+        self.fecha_reserva= datetime.datetime.now()
+    def cancelar_reserva(self,articulo):
+        articulo.reservado=False
+        articulo.fecha_reserva= None
+        articulo.funcionario=None
+        return articulo

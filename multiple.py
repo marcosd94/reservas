@@ -1,7 +1,7 @@
 from articulo import Articulo
 from reservable import Reservable
 class MultipleElectrico(Articulo,Reservable):
-    """docstring for MultipleElectrico"""
+    """Clase MultipleElectrico, que desciende de la clase Articulo"""
     def __init__(self, fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso,reservado):
         Articulo.__init__(self, fecha_reserva,Funcionario,reservado)
         self.descripcion= descripcion
@@ -12,8 +12,6 @@ class MultipleElectrico(Articulo,Reservable):
     def eliminar_articulo(self):
         pass
     def reservar(self,):
-        pass
-    def cancelar_reserva(self):
         pass
     def aceptar_reserva(self):
         pass

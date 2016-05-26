@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 class Reservable(metaclass=ABCMeta):
-    """docstring for """
+    """Clase Abstracta Reservable, la cual contiene los metodos para que un Articulo pueda ser reservado"""
     @abstractmethod
     def reservar(self):
         pass

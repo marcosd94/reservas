@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from persona import Persona
 from persistence import MiZODB,transaction
 class Funcionario(Persona,metaclass=ABCMeta):
-    """docstring for Funcionario"""
+    """Clase Funcionario, la misma desciende de la clase Persona y guarda los datos especificos que debe tener un funcionario"""
     def __init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo,cargo,fecha_ingreso,codigo,Dependencia):
         Persona.__init__(self, nombre,apellido,documento_identidad,fecha_nacimiento,sexo)
         self.cargo = cargo
