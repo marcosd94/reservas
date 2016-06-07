@@ -13,7 +13,6 @@ from controlador_articulo import ControladorArticulo
 import datetime
 import subprocess
 import sys
-
 def limpiar():
    subprocess.call("clear")
 def inicio(codigo):
@@ -359,7 +358,7 @@ def cancelar_reserva(codigo):
         articulo= dbroot[equipo]
         controller=ControladorArticulo()
         if (controller.articulo_reservado(articulo)):
-            articulo= controller.cancelar_reserva(articulo)
+            articulo.cancelar_reserva()
             dbroot[equipo]=articulo
             transaction.commit()
             print ('Articulo: ',articulo.descripcion,' liberado con exito')
