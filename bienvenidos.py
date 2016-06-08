@@ -1,9 +1,10 @@
 import tkinter
 from roles import Administrador
 from roles import Gestor
+import login
 import view_listar_funcionarios
 def salir():
-    exit()
+    ventana.destroy()
 def  ventana(usu):
     ventana=tkinter.Tk()
     ventana.title("BIENVENIDO AL SISTEMA")
@@ -41,12 +42,14 @@ def  ventana(usu):
     def CurSelet(evt):
         value=str(mylistbox.get(mylistbox.curselection()))
         if(value=='Cargar Funcionario'):
-            pass
+            ventana.destroy()
+            view_listar_funcionarios.cargar_funcionario(usu)
         elif (value=='Listar Funcionarios'):
             ventana.destroy()
             view_listar_funcionarios.listar_funcionarios(usu)
         elif(value=='Eliminar Funcionario'):
-            pass
+            ventana.destroy()
+            view_listar_funcionarios.eliminar_funcionario(usu)
         elif(value=='Cargar Articulo'):
             pass
         elif(value=='Listar Articulos'):
@@ -61,9 +64,9 @@ def  ventana(usu):
             pass
         elif(value=='Cerrar Sesión'):
             ventana.destroy()
-            import login
+            login.inicio()
         elif (value=='Salir'):
-            exit()
+            ventana.destroy()
 
     mylistbox=tkinter.Listbox(ventana,height=12,font=('times',13))
     mylistbox.bind('<<ListboxSelect>>',CurSelet)

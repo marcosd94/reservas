@@ -473,4 +473,4 @@ def login():
             contrasenha=input('Vuelva a ingresar la contraseña: ')
     db.close()
     inicio(codigo)
-#login()
+login()
