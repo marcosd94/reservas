@@ -2,7 +2,8 @@ import tkinter
 from roles import Administrador
 from roles import Gestor
 import login
-import view_listar_funcionarios
+import view_funcionarios
+import view_articulos
 def salir():
     ventana.destroy()
 def  ventana(usu):
@@ -43,19 +44,20 @@ def  ventana(usu):
         value=str(mylistbox.get(mylistbox.curselection()))
         if(value=='Cargar Funcionario'):
             ventana.destroy()
-            view_listar_funcionarios.cargar_funcionario(usu)
+            view_funcionarios.cargar_funcionario(usu)
         elif (value=='Listar Funcionarios'):
             ventana.destroy()
-            view_listar_funcionarios.listar_funcionarios(usu)
+            view_funcionarios.listar_funcionarios(usu)
         elif(value=='Eliminar Funcionario'):
             ventana.destroy()
-            view_listar_funcionarios.eliminar_funcionario(usu)
+            view_funcionarios.eliminar_funcionario(usu)
         elif(value=='Cargar Articulo'):
             pass
         elif(value=='Listar Articulos'):
             pass
         elif(value=='Reservar Articulo'):
-            pass
+            ventana.destroy()
+            view_articulos.cargar_reserva(usu)
         elif(value=='Cancelar Reserva'):
             pass
         elif(value=='Crear Dependencia'):

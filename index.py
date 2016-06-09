@@ -358,7 +358,7 @@ def cancelar_reserva(codigo):
         articulo= dbroot[equipo]
         controller=ControladorArticulo()
         if (controller.articulo_reservado(articulo)):
-            articulo.cancelar_reserva()
+            articulo.cancelar_reserva(articulo)
             dbroot[equipo]=articulo
             transaction.commit()
             print ('Articulo: ',articulo.descripcion,' liberado con exito')

@@ -44,7 +44,7 @@ def inicio():
     L2.place(bordermode='outside', height=20, width=100, x=50, y=60)
     usuario=tkinter.Entry(window, font='times')
     usuario.place(bordermode='outside', height=20, width=200, x=150, y=30)
-    contraseña=tkinter.Entry(window, font='times') #se escoge encriptar con * la contraseña
+    contraseña=tkinter.Entry(window, font='times',show='*') #se escoge encriptar con * la contraseña
     contraseña.place(bordermode='outside', height=20, width=200, x=150, y=60)
     button0 = tkinter.Button(window,text="Acceder", command=verificar)
     button0.place(bordermode='outside', height=40, width=100, x=50,y=90)

@@ -2,6 +2,7 @@ import tkinter
 from persistence import MiZODB,transaction
 from funcionario import Funcionario
 from controlador_dependencia import ControladorDependencia
+from controlador_funcionario import ControladorFuncionario
 import login
 import bienvenidos
 import tkinter.ttk as ttk
@@ -29,11 +30,6 @@ def  listar_funcionarios(usu):
         obj = dbroot[key]
         if isinstance(obj, Funcionario):
             f="Usuario: "+ key+", Funcionario: "+ obj.nombres+" "+obj.apellidos+ ", Cargo: "+ obj.cargo+ ", Rol: "+obj.rol
-            #, Codigo: "+ obj.codigo)
-            #print ("CI: ", obj.documento_identidad)
-            #print ("Dependencia: ", obj.dependencia.nombre_dependencia)
-            #print ("Cargo: ", obj.cargo, " Rol: ",obj.rol)
-            #print ("\n---------------------------------")
             mylistbox.insert('end',f)
     db.close()
 
@@ -48,7 +44,7 @@ def  listar_funcionarios(usu):
 def eliminar_funcionario(usu):
     funcionarios=tkinter.Tk()
     funcionarios.title("ELIMINAR FUNCIONARIOS")
-    funcionarios.geometry("1000x500")
+    funcionarios.geometry("800x500")
     def cerrar():
         funcionarios.destroy()
         login.inicio()
@@ -75,9 +71,11 @@ def eliminar_funcionario(usu):
     #L1 = tkinter.Label(ventana, font='Arial', text="POR FAVOR ELIJA LA TAREA A REALIZAR")
     #L1.place(bordermode='outside', height=50,x=100, y=10)
 
-    mylistbox=tkinter.Listbox(funcionarios,height=12,width=100,font=('times',13))
+    mylistbox=tkinter.Listbox(funcionarios,height=12,width=50,font=('times',13))
     mylistbox.bind('<<ListboxSelect>>',CurSelet)
     mylistbox.place(x=32,y=110)
+    mylistbox2=tkinter.Listbox(funcionarios,height=12,width=70,font=('times',13))
+    mylistbox2.place(x=132,y=110)
     db = MiZODB()
     dbroot = db.raiz
     for key in dbroot.keys():
@@ -90,8 +88,10 @@ def eliminar_funcionario(usu):
             #print ("Cargo: ", obj.cargo, " Rol: ",obj.rol)
             #print ("\n---------------------------------")
             mylistbox.insert('end',f)
+            mylistbox2.insert('end',"Funcionario: "+ obj.nombres+" "+obj.apellidos+ ", Cargo: "+ obj.cargo+ ", Rol: "+obj.rol)
     db.close()
-
+    label_usuario=tkinter.Label(funcionarios, font='Arial', text="POR FAVOR ELIJA EL FUNCIONARIO A ELIMINAR")
+    label_usuario.place(bordermode='outside', height=50,x=100, y=10)
     inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)
     inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
     button1 = tkinter.Button(funcionarios,text="Cerrar Sesión", command=cerrar)
@@ -113,6 +113,26 @@ def cargar_funcionario(usu):
         #print (value)
         funcionarios.destroy()
         bienvenidos.ventana(usu)
+    def cargar():
+        #value=str(cbx.get())
+
+        def cerrar_exp():
+            funcionarios.destroy()
+            cargar_funcionario(usu)
+        try:
+            fun=ControladorFuncionario()
+            fun.cargar_funcionario(str(nombre.get()), str(apellido.get()), str(documento_identidad.get()), str(fecha_nacimiento.get()), str(sexo.get()) , str(cargo.get()),
+            str(fecha_ingreso.get()), str(codigo.get()), str(usuario.get()), str(contrasenha.get()), str(dep.get()), str(rol.get()))
+        except:
+            alerta = tkinter.Message(funcionarios, relief='raised', text='NO SE PUDO CARGAR AL FUNCIONARIO', width=200)
+            alerta.place(bordermode='outside', height=150, width=200, y=30,x=150)
+            ok = tkinter.Button(alerta,text="Ok", command=cerrar_exp)
+            ok.pack(side="bottom")
+        else:
+            alerta = tkinter.Message(funcionarios, relief='raised', text='FUNCIONARIO CARGADO CON EXITO', width=200)
+            alerta.place(bordermode='outside', height=150, width=200, y=30,x=150)
+            ok = tkinter.Button(alerta,text="Ok", command=cerrar_exp)
+            ok.pack(side="bottom")
     def CurSelet(evt):
         def cerrar_exp():
             funcionarios.destroy()
@@ -166,37 +186,41 @@ def cargar_funcionario(usu):
     rol.place(bordermode='outside', height=20, width=200, x=250, y=30)
     #rol=tkinter.Entry(funcionarios, font='times')
     #rol.place(bordermode='outside', height=20, width=200, x=250, y=30)
-    nombre=tkinter.Entry(funcionarios, font='times') #se escoge encriptar con * la contraseña
+    nombre=tkinter.Entry(funcionarios, font='times')
     nombre.place(bordermode='outside', height=20, width=200, x=250, y=55)
     apellido=tkinter.Entry(funcionarios, font='times')
     apellido.place(bordermode='outside', height=20, width=200, x=250, y=80)
-    documento_identidad=tkinter.Entry(funcionarios, font='times') #se escoge encriptar con * la contraseña
+    documento_identidad=tkinter.Entry(funcionarios, font='times')
     documento_identidad.place(bordermode='outside', height=20, width=200, x=250, y=105)
     fecha_nacimiento=tkinter.Entry(funcionarios, font='times')
     fecha_nacimiento.place(bordermode='outside', height=20, width=200, x=250, y=130)
-    sexo=tkinter.Entry(funcionarios, font='times') #se escoge encriptar con * la contraseña
+
+    sexo=['MASCULINO','FEMENINO']
+    sexo=ttk.Combobox(funcionarios,value=sexo)
     sexo.place(bordermode='outside', height=20, width=200, x=250, y=155)
     cargo=tkinter.Entry(funcionarios, font='times')
     cargo.place(bordermode='outside', height=20, width=200, x=250, y=180)
     ctrl_dep = ControladorDependencia()
     dep=ctrl_dep.listar_dependencia()
-    dep=ttk.Combobox(funcionarios,value=dep) #se escoge encriptar con * la contraseña
+    dep=ttk.Combobox(funcionarios,value=dep)
     dep.place(bordermode='outside', height=20, width=200, x=250, y=205)
     fecha_ingreso=tkinter.Entry(funcionarios, font='times')
     fecha_ingreso.place(bordermode='outside', height=20, width=200, x=250, y=230)
-    codigo=tkinter.Entry(funcionarios, font='times') #se escoge encriptar con * la contraseña
+    codigo=tkinter.Entry(funcionarios, font='times')
     codigo.place(bordermode='outside', height=20, width=200, x=250, y=255)
     usuario=tkinter.Entry(funcionarios, font='times')
     usuario.place(bordermode='outside', height=20, width=200, x=250, y=280)
     contrasenha=tkinter.Entry(funcionarios, font='times')
     contrasenha.place(bordermode='outside', height=20, width=200, x=250, y=305)
 #   BOTONES
+    cargar = tkinter.Button(funcionarios,text="Cargar", command=cargar)
+    cargar.place(bordermode='outside', height=40, width=100, x=40,y=400)
     inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)
-    inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
-    button1 = tkinter.Button(funcionarios,text="Cerrar Sesión", command=cerrar)
-    button1.place(bordermode='outside', height=40, width=100, x=140,y=400)
-    button0 = tkinter.Button(funcionarios,text="Salir", command=salir)
-    button0.place(bordermode='outside', height=40, width=100, x=240,y=400)
+    inicio.place(bordermode='outside', height=40, width=100, x=140,y=400)
+    cerrar = tkinter.Button(funcionarios,text="Cerrar Sesión", command=cerrar)
+    cerrar.place(bordermode='outside', height=40, width=100, x=240,y=400)
+    salir = tkinter.Button(funcionarios,text="Salir", command=salir)
+    salir.place(bordermode='outside', height=40, width=100, x=340,y=400)
     def shutdown_ttk_repeat():
         funcionarios.eval('::ttk::CancelRepeat')
         funcionarios.destroy()
