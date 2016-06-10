@@ -14,3 +14,7 @@ class ControladorFuncionario():
         elif(rol=='Reservas'):
             f1= Reservas(nombre, apellido, documento_identidad, fecha_nacimiento, sexo , cargo,fecha_ingreso,codigo, usuario, contrasenha,dep)
         f1.cargar_funcionario()
+    def eliminar_funcionario(self,usuario, codigo_usuario):
+        usuario.eliminar_funcionario(codigo_usuario)
+    def listar_funcionarios(self,usuario):
+        return usuario.listar_funcionarios()

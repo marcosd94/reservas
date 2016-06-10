@@ -9,15 +9,14 @@ from articulo import Articulo
 def cargar_reserva(usu):
     articulos=tkinter.Tk()
     articulos.title("LISTADO DE ARTICULOS LIBRES")
-    articulos.geometry("1000x500")
+    articulos.geometry("800x500")
     def CurSelet(evt):
         def cerrar_exp():
             articulos.destroy()
             cargar_reserva(usu)
-        value=str(mylistbox.get(mylistbox.curselection()))
-        a=ControladorArticulo()
-        a.reservar_articulo1(usu,str(mylistbox.get(mylistbox.curselection())))
-        frame2 = tkinter.Message(articulos, relief='raised', text="FUNCIONARIO ELIMINADO CON EXITO", width=200)
+        ctrl_art=ControladorArticulo()
+        ctrl_art.reservar_articulo(usu,str(mylistbox.get(mylistbox.curselection())))
+        frame2 = tkinter.Message(articulos, relief='raised', text="ARTICULO RESERVADO CON EXITO", width=200)
         frame2.place(bordermode='outside', height=150, width=200, y=30,x=150)
         button3 = tkinter.Button(frame2,text="Ok", command=cerrar_exp)
         button3.pack(side="bottom")
@@ -33,28 +32,17 @@ def cargar_reserva(usu):
     #L1 = tkinter.Label(ventana, font='Arial', text="POR FAVOR ELIJA LA TAREA A REALIZAR")
     #L1.place(bordermode='outside', height=50,x=100, y=10)
 
-    mylistbox=tkinter.Listbox(articulos,height=12,width=70,font=('times',13))
+    mylistbox=tkinter.Listbox(articulos,height=12,width=50,font=('times',13))
     mylistbox.bind('<<ListboxSelect>>',CurSelet)
     mylistbox.place(x=32,y=110)
-    mylistbox2=tkinter.Listbox(articulos,height=12,width=100,font=('times',13))
+    mylistbox2=tkinter.Listbox(articulos,height=12,width=70,font=('times',13))
     mylistbox2.place(x=132,y=110)
-    db = MiZODB()
-    dbroot = db.raiz
-    for key in dbroot.keys():
-        obj = dbroot[key]
-        if isinstance(obj, Articulo):
-            if (obj.reservado==False):
-                codigo=key
-                art="Codigo articulo: "+ key+", descripcion: "+ obj.descripcion
-                #, Codigo: "+ obj.codigo)
-                #print ("CI: ", obj.documento_identidad)
-                #print ("Dependencia: ", obj.dependencia.nombre_dependencia)
-                #print ("Cargo: ", obj.cargo, " Rol: ",obj.rol)
-                #print ("\n---------------------------------")
-                mylistbox.insert('end',codigo)
-                mylistbox2.insert('end',art)
-    db.close()
-
+    ctrl_art=ControladorArticulo()
+    ctrl_art=ctrl_art.listar_articulos_libres()
+    for key in ctrl_art[0] :
+        mylistbox.insert('end',key)
+    for values in ctrl_art[1]:
+        mylistbox2.insert('end',values)
     inicio = tkinter.Button(articulos,text="Inicio", command=inicio)
     inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
     button1 = tkinter.Button(articulos,text="Cerrar Sesión", command=cerrar)
@@ -62,61 +50,6 @@ def cargar_reserva(usu):
     button0 = tkinter.Button(articulos,text="Salir", command=salir)
     button0.place(bordermode='outside', height=40, width=100, x=240,y=400)
     articulos.mainloop()
-
-def eliminar_funcionario(usu):
-    funcionarios=tkinter.Tk()
-    funcionarios.title("ELIMINAR FUNCIONARIOS")
-    funcionarios.geometry("1000x500")
-    def cerrar():
-        funcionarios.destroy()
-        login.inicio()
-    def salir():
-        funcionarios.destroy()
-    def inicio():
-        funcionarios.destroy()
-        bienvenidos.ventana(usu)
-    def CurSelet(evt):
-        def cerrar_exp():
-            funcionarios.destroy()
-            eliminar_funcionario(usu)
-        value=str(mylistbox.get(mylistbox.curselection()))
-        db = MiZODB()
-        dbroot = db.raiz
-        del dbroot[value]
-        transaction.commit()
-        db.close()
-        frame2 = tkinter.Message(funcionarios, relief='raised', text='FUNCIONARIO ELIMINADO CON EXITO', width=200)
-        frame2.place(bordermode='outside', height=150, width=200, y=30,x=150)
-        button3 = tkinter.Button(frame2,text="Ok", command=cerrar_exp)
-        button3.pack(side="bottom")
-    #window.wm_iconbitmap('favicon.ico')
-    #L1 = tkinter.Label(ventana, font='Arial', text="POR FAVOR ELIJA LA TAREA A REALIZAR")
-    #L1.place(bordermode='outside', height=50,x=100, y=10)
-
-    mylistbox=tkinter.Listbox(funcionarios,height=12,width=100,font=('times',13))
-    mylistbox.bind('<<ListboxSelect>>',CurSelet)
-    mylistbox.place(x=32,y=110)
-    db = MiZODB()
-    dbroot = db.raiz
-    for key in dbroot.keys():
-        obj = dbroot[key]
-        if isinstance(obj, Funcionario):
-            f=key
-            #, Codigo: "+ obj.codigo)
-            #print ("CI: ", obj.documento_identidad)
-            #print ("Dependencia: ", obj.dependencia.nombre_dependencia)
-            #print ("Cargo: ", obj.cargo, " Rol: ",obj.rol)
-            #print ("\n---------------------------------")
-            mylistbox.insert('end',f)
-    db.close()
-
-    inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)
-    inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
-    button1 = tkinter.Button(funcionarios,text="Cerrar Sesión", command=cerrar)
-    button1.place(bordermode='outside', height=40, width=100, x=140,y=400)
-    button0 = tkinter.Button(funcionarios,text="Salir", command=salir)
-    button0.place(bordermode='outside', height=40, width=100, x=240,y=400)
-    funcionarios.mainloop()
 def cargar_funcionario(usu):
     funcionarios=tkinter.Tk()
     funcionarios.title("CARGAR FUNCIONARIOS")
@@ -151,27 +84,6 @@ def cargar_funcionario(usu):
             alerta.place(bordermode='outside', height=150, width=200, y=30,x=150)
             ok = tkinter.Button(alerta,text="Ok", command=cerrar_exp)
             ok.pack(side="bottom")
-    def CurSelet(evt):
-        def cerrar_exp():
-            funcionarios.destroy()
-            eliminar_funcionario(usu)
-        value=str(mylistbox.get(mylistbox.curselection()))
-        db = MiZODB()
-        dbroot = db.raiz
-        del dbroot[value]
-        transaction.commit()
-        db.close()
-        frame2 = tkinter.Message(funcionarios, relief='raised', text='FUNCIONARIO ELIMINADO CON EXITO', width=200)
-        frame2.place(bordermode='outside', height=150, width=200, y=30,x=150)
-        button3 = tkinter.Button(frame2,text="Ok", command=cerrar_exp)
-        button3.pack(side="bottom")
-    #window.wm_iconbitmap('favicon.ico')
-    #L1 = tkinter.Label(ventana, font='Arial', text="POR FAVOR ELIJA LA TAREA A REALIZAR")
-    #L1.place(bordermode='outside', height=50,x=100, y=10)
-
-    #mylistbox=tkinter.Listbox(funcionarios,height=12,width=100,font=('times',13))
-    #mylistbox.bind('<<ListboxSelect>>',CurSelet)
-    #mylistbox.place(x=32,y=110)
     titulo = tkinter.Label(funcionarios, font='Arial', text="CARGAR FUNCIONARIOS")
     titulo.place(bordermode='outside', height=20, width=300, x=100)
     lbl_rol = tkinter.Label(funcionarios, font='Arial', text="Ingrese Rol del Funcionario")
@@ -230,7 +142,6 @@ def cargar_funcionario(usu):
     usuario.place(bordermode='outside', height=20, width=200, x=250, y=280)
     contrasenha=tkinter.Entry(funcionarios, font='times')
     contrasenha.place(bordermode='outside', height=20, width=200, x=250, y=305)
-#   BOTONES
     cargar = tkinter.Button(articulos,text="Cargar", command=cargar)
     cargar.place(bordermode='outside', height=40, width=100, x=40,y=400)
     inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)
@@ -239,9 +150,79 @@ def cargar_funcionario(usu):
     cerrar.place(bordermode='outside', height=40, width=100, x=240,y=400)
     salir = tkinter.Button(funcionarios,text="Salir", command=salir)
     salir.place(bordermode='outside', height=40, width=100, x=340,y=400)
-    def shutdown_ttk_repeat():
-        funcionarios.eval('::ttk::CancelRepeat')
-        funcionarios.destroy()
-
-    funcionarios.protocol("WM_DELETE_WINDOW", shutdown_ttk_repeat)
     funcionarios.mainloop()
+def cancelar_reserva(usu):
+    articulos=tkinter.Tk()
+    articulos.title("LISTADO DE ARTICULOS RESERVADOS")
+    articulos.geometry("800x500")
+    def CurSelet(evt):
+        def cerrar_exp():
+            articulos.destroy()
+            cancelar_reserva(usu)
+        ctrl_art=ControladorArticulo()
+        ctrl_art.cancelar_reserva(str(mylistbox.get(mylistbox.curselection())))
+        frame2 = tkinter.Message(articulos, relief='raised', text="ARTICULO LIBERADO CON EXITO", width=200)
+        frame2.place(bordermode='outside', height=150, width=200, y=30,x=150)
+        button3 = tkinter.Button(frame2,text="Ok", command=cerrar_exp)
+        button3.pack(side="bottom")
+    def cerrar():
+        articulos.destroy()
+        login.inicio()
+    def salir():
+        articulos.destroy()
+    def inicio():
+        articulos.destroy()
+        bienvenidos.ventana(usu)
+    #window.wm_iconbitmap('favicon.ico')
+    #L1 = tkinter.Label(ventana, font='Arial', text="POR FAVOR ELIJA LA TAREA A REALIZAR")
+    #L1.place(bordermode='outside', height=50,x=100, y=10)
+
+    mylistbox=tkinter.Listbox(articulos,height=12,width=50,font=('times',13))
+    mylistbox.bind('<<ListboxSelect>>',CurSelet)
+    mylistbox.place(x=32,y=110)
+    mylistbox2=tkinter.Listbox(articulos,height=12,width=70,font=('times',13))
+    mylistbox2.place(x=132,y=110)
+    ctrl_art=ControladorArticulo()
+    ctrl_art=ctrl_art.listar_articulos_reservados()
+    for key in ctrl_art[0] :
+        mylistbox.insert('end',key)
+    for values in ctrl_art[1]:
+        mylistbox2.insert('end',values)
+
+    inicio = tkinter.Button(articulos,text="Inicio", command=inicio)
+    inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
+    button1 = tkinter.Button(articulos,text="Cerrar Sesión", command=cerrar)
+    button1.place(bordermode='outside', height=40, width=100, x=140,y=400)
+    button0 = tkinter.Button(articulos,text="Salir", command=salir)
+    button0.place(bordermode='outside', height=40, width=100, x=240,y=400)
+    articulos.mainloop()
+def listar_articulos(usu):
+    articulos=tkinter.Tk()
+    articulos.title("LISTADO DE ARTICULOS")
+    articulos.geometry("800x500")
+    def cerrar():
+        articulos.destroy()
+        login.inicio()
+    def salir():
+        articulos.destroy()
+    def inicio():
+        articulos.destroy()
+        bienvenidos.ventana(usu)
+    #window.wm_iconbitmap('favicon.ico')
+    #L1 = tkinter.Label(ventana, font='Arial', text="POR FAVOR ELIJA LA TAREA A REALIZAR")
+    #L1.place(bordermode='outside', height=50,x=100, y=10)
+
+    mylistbox=tkinter.Listbox(articulos,height=12,width=100,font=('times',13))
+    mylistbox.place(x=32,y=110)
+    ctrl_art=ControladorArticulo()
+    ctrl_art=ctrl_art.listar_articulos()
+    for values in ctrl_art:
+        mylistbox.insert('end',values)
+
+    inicio = tkinter.Button(articulos,text="Inicio", command=inicio)
+    inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
+    cerrar = tkinter.Button(articulos,text="Cerrar Sesión", command=cerrar)
+    cerrar.place(bordermode='outside', height=40, width=100, x=140,y=400)
+    salir = tkinter.Button(articulos,text="Salir", command=salir)
+    salir.place(bordermode='outside', height=40, width=100, x=240,y=400)
+    articulos.mainloop()

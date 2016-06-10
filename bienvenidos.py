@@ -54,12 +54,14 @@ def  ventana(usu):
         elif(value=='Cargar Articulo'):
             pass
         elif(value=='Listar Articulos'):
-            pass
+            ventana.destroy()
+            view_articulos.listar_articulos(usu)
         elif(value=='Reservar Articulo'):
             ventana.destroy()
             view_articulos.cargar_reserva(usu)
         elif(value=='Cancelar Reserva'):
-            pass
+            ventana.destroy()
+            view_articulos.cancelar_reserva(usu)
         elif(value=='Crear Dependencia'):
             pass
         elif(value=='Listar Dependencias'):

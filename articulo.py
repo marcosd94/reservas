@@ -14,60 +14,47 @@ class Articulo(metaclass=ABCMeta):
     def eliminar_articulo(self):
         pass
     def listar_articulos(self):
-        print ('        LISTA DE EQUIPOS')
-        print ("\n---------------------------------")
         db = MiZODB()
         dbroot = db.raiz
+        lista=[]
         for key in dbroot.keys():
             obj = dbroot[key]
             if isinstance(obj, Articulo):
-                print ("Clave del Articulo: ", key)
-                print ("Descripcion: ", obj.descripcion)
                 if(obj.reservado==True):
-                    print ("Reservado: SI")
+                    lista.append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion+ " Reservado: SI, en fecha: "+ str(obj.fecha_reserva))
                 else:
-                    print ("Reservado: NO")
-                print ("\n---------------------------------")
-        transaction.commit()
+                    lista.append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion+" Reservado: NO")
         db.close()
-    def articulos_reservados(self):
+        return lista
+    def listar_articulos_reservados(self):
         db = MiZODB()
         dbroot = db.raiz
-        count=0
+        lista=[[],[]]
         for key in dbroot.keys():
             obj = dbroot[key]
             if isinstance(obj, Articulo):
                 if(obj.reservado==True):
-                    count+=1
-                    print ("Clave del Articulo: ", key)
-                    print ("Descripcion: ", obj.descripcion)
-                    print ("Reservado: SI, en fecha: ", obj.fecha_reserva)
-                    print ("\n---------------------------------")
-        transaction.commit()
+                    lista[0].append(key)
+                    lista[1].append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion)
         db.close()
-        return count
-    def articulos_libres(self):
+        return lista
+    def listar_articulos_libres(self):
         db = MiZODB()
         dbroot = db.raiz
-        count=0
+        lista=[[],[]]
         for key in dbroot.keys():
             obj = dbroot[key]
             if isinstance(obj, Articulo):
                 if(obj.reservado==False):
-                    count+=1
-                    print ("Clave del Articulo: ", key)
-                    print ("Descripcion: ", obj.descripcion)
-                    print ("Reservado: NO")
-                    print ("\n---------------------------------")
-        transaction.commit()
+                    lista[0].append(key)
+                    lista[1].append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion)
         db.close()
-        return count
+        return lista
     def reservar_articulo(self,codigo):
         self.funcionario= codigo
         self.reservado=True
         self.fecha_reserva= datetime.datetime.now()
-    def cancelar_reserva(self,articulo):
-        articulo.reservado=False
-        articulo.fecha_reserva= None
-        articulo.funcionario=None
-        return articulo
+    def cancelar_reserva(self):
+        self.reservado=False
+        self.fecha_reserva= None
+        self.funcionario=None

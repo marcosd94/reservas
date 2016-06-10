@@ -35,7 +35,6 @@ def inicio():
     window=tkinter.Tk()
     window.title("VENTANA DE PRUEBA")
     window.geometry("500x300")
-    #window.wm_iconbitmap('favicon.ico')
     titulo = tkinter.Label(window, font='Arial', text="SISTEMA DE RESERVAS")
     titulo.place(bordermode='outside', height=20, width=300, x=100)
     L1 = tkinter.Label(window, font='Arial', text="Usuario")

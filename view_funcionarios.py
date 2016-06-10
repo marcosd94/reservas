@@ -35,10 +35,10 @@ def  listar_funcionarios(usu):
 
     inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)
     inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
-    button1 = tkinter.Button(funcionarios,text="Cerrar Sesión", command=cerrar)
-    button1.place(bordermode='outside', height=40, width=100, x=140,y=400)
-    button0 = tkinter.Button(funcionarios,text="Salir", command=salir)
-    button0.place(bordermode='outside', height=40, width=100, x=240,y=400)
+    cerrar = tkinter.Button(funcionarios,text="Cerrar Sesión", command=cerrar)
+    cerrar.place(bordermode='outside', height=40, width=100, x=140,y=400)
+    salir = tkinter.Button(funcionarios,text="Salir", command=salir)
+    salir.place(bordermode='outside', height=40, width=100, x=240,y=400)
     funcionarios.mainloop()
 
 def eliminar_funcionario(usu):
@@ -57,12 +57,8 @@ def eliminar_funcionario(usu):
         def cerrar_exp():
             funcionarios.destroy()
             eliminar_funcionario(usu)
-        value=str(mylistbox.get(mylistbox.curselection()))
-        db = MiZODB()
-        dbroot = db.raiz
-        del dbroot[value]
-        transaction.commit()
-        db.close()
+        fun=ControladorFuncionario()
+        fun.eliminar_funcionario(usu, str(mylistbox.get(mylistbox.curselection())))
         frame2 = tkinter.Message(funcionarios, relief='raised', text='FUNCIONARIO ELIMINADO CON EXITO', width=200)
         frame2.place(bordermode='outside', height=150, width=200, y=30,x=150)
         button3 = tkinter.Button(frame2,text="Ok", command=cerrar_exp)
@@ -76,20 +72,12 @@ def eliminar_funcionario(usu):
     mylistbox.place(x=32,y=110)
     mylistbox2=tkinter.Listbox(funcionarios,height=12,width=70,font=('times',13))
     mylistbox2.place(x=132,y=110)
-    db = MiZODB()
-    dbroot = db.raiz
-    for key in dbroot.keys():
-        obj = dbroot[key]
-        if isinstance(obj, Funcionario):
-            f=key
-            #, Codigo: "+ obj.codigo)
-            #print ("CI: ", obj.documento_identidad)
-            #print ("Dependencia: ", obj.dependencia.nombre_dependencia)
-            #print ("Cargo: ", obj.cargo, " Rol: ",obj.rol)
-            #print ("\n---------------------------------")
-            mylistbox.insert('end',f)
-            mylistbox2.insert('end',"Funcionario: "+ obj.nombres+" "+obj.apellidos+ ", Cargo: "+ obj.cargo+ ", Rol: "+obj.rol)
-    db.close()
+    ctrl_fun=ControladorFuncionario()
+    fun=ctrl_fun.listar_funcionarios(usu)
+    for key in fun[0] :
+        mylistbox.insert('end',key)
+    for values in fun[1]:
+        mylistbox2.insert('end',values)
     label_usuario=tkinter.Label(funcionarios, font='Arial', text="POR FAVOR ELIJA EL FUNCIONARIO A ELIMINAR")
     label_usuario.place(bordermode='outside', height=50,x=100, y=10)
     inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)
@@ -102,7 +90,7 @@ def eliminar_funcionario(usu):
 def cargar_funcionario(usu):
     funcionarios=tkinter.Tk()
     funcionarios.title("CARGAR FUNCIONARIOS")
-    funcionarios.geometry("1000x500")
+    funcionarios.geometry("800x500")
     def cerrar():
         funcionarios.destroy()
         login.inicio()
@@ -133,27 +121,7 @@ def cargar_funcionario(usu):
             alerta.place(bordermode='outside', height=150, width=200, y=30,x=150)
             ok = tkinter.Button(alerta,text="Ok", command=cerrar_exp)
             ok.pack(side="bottom")
-    def CurSelet(evt):
-        def cerrar_exp():
-            funcionarios.destroy()
-            eliminar_funcionario(usu)
-        value=str(mylistbox.get(mylistbox.curselection()))
-        db = MiZODB()
-        dbroot = db.raiz
-        del dbroot[value]
-        transaction.commit()
-        db.close()
-        frame2 = tkinter.Message(funcionarios, relief='raised', text='FUNCIONARIO ELIMINADO CON EXITO', width=200)
-        frame2.place(bordermode='outside', height=150, width=200, y=30,x=150)
-        button3 = tkinter.Button(frame2,text="Ok", command=cerrar_exp)
-        button3.pack(side="bottom")
-    #window.wm_iconbitmap('favicon.ico')
-    #L1 = tkinter.Label(ventana, font='Arial', text="POR FAVOR ELIJA LA TAREA A REALIZAR")
-    #L1.place(bordermode='outside', height=50,x=100, y=10)
 
-    #mylistbox=tkinter.Listbox(funcionarios,height=12,width=100,font=('times',13))
-    #mylistbox.bind('<<ListboxSelect>>',CurSelet)
-    #mylistbox.place(x=32,y=110)
     titulo = tkinter.Label(funcionarios, font='Arial', text="CARGAR FUNCIONARIOS")
     titulo.place(bordermode='outside', height=20, width=300, x=100)
     lbl_rol = tkinter.Label(funcionarios, font='Arial', text="Ingrese Rol del Funcionario")
@@ -221,9 +189,4 @@ def cargar_funcionario(usu):
     cerrar.place(bordermode='outside', height=40, width=100, x=240,y=400)
     salir = tkinter.Button(funcionarios,text="Salir", command=salir)
     salir.place(bordermode='outside', height=40, width=100, x=340,y=400)
-    def shutdown_ttk_repeat():
-        funcionarios.eval('::ttk::CancelRepeat')
-        funcionarios.destroy()
-
-    funcionarios.protocol("WM_DELETE_WINDOW", shutdown_ttk_repeat)
     funcionarios.mainloop()

@@ -13,3 +13,9 @@ class ControladorPersistence():
         obj=dbroot[clave]
         db.close()
         return obj
+    def eliminar(self,clave):
+        db=MiZODB()
+        dbroot=db.raiz
+        del dbroot[clave]
+        transaction.commit()
+        db.close()
