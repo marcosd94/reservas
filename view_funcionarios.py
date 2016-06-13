@@ -98,8 +98,8 @@ def cargar_funcionario(usu):
             fun=ControladorFuncionario()
             fun.cargar_funcionario(str(nombre.get()), str(apellido.get()), str(documento_identidad.get()), str(fecha_nacimiento.get()), str(sexo.get()) , str(cargo.get()),
             str(fecha_ingreso.get()), str(codigo.get()), str(usuario.get()), str(contrasenha.get()), str(dep.get()), str(rol.get()))
-        except:
-            alerta = tkinter.Message(funcionarios, relief='raised', text='NO SE PUDO CARGAR AL FUNCIONARIO', width=200)
+        except Exception as e:
+            alerta = tkinter.Message(funcionarios, relief='raised', text='NO SE PUDO CARGAR AL FUNCIONARIO\nError: '+str(e), width=200)
             alerta.place(bordermode='outside', height=150, width=200, y=30,x=150)
             ok = tkinter.Button(alerta,text="Ok", command=cerrar_exp)
             ok.pack(side="bottom")

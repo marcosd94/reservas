@@ -23,8 +23,8 @@ def cargar_dependencia(usu):
         try:
             ctrl_dep=ControladorDependencia()
             ctrl_dep.cargar_dependencia(str(nombre_dependencia.get()), str(codigo_corto.get()), str(fecha_creacion.get()) ,True)
-        except:
-            alerta = tkinter.Message(dependencia, relief='raised', text='NO SE PUDO CARGAR LA DEPENDENCIA', width=200)
+        except Exception as e:
+            alerta = tkinter.Message(dependencia, relief='raised', text='NO SE PUDO CARGAR LA DEPENDENCIA\nError: '+str(e), width=200)
             alerta.place(bordermode='outside', height=150, width=200, y=30,x=150)
             ok = tkinter.Button(alerta,text="Ok", command=cerrar_exp)
             ok.pack(side="bottom")
@@ -58,7 +58,7 @@ def cargar_dependencia(usu):
     cerrar = tkinter.Button(dependencia,text="Cerrar Sesión", command=cerrar)
     cerrar.place(bordermode='outside', height=40, width=100, x=250,y=110)
     salir = tkinter.Button(dependencia,text="Salir", command=salir)
-    salir.place(bordermode='outside', height=40, width=100, x=350,y=130)
+    salir.place(bordermode='outside', height=40, width=100, x=350,y=110)
     dependencia.mainloop()
 def listar_dependencia(usu):
     dependencia=tkinter.Tk()
