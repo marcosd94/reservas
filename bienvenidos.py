@@ -4,6 +4,7 @@ from roles import Gestor
 import login
 import view_funcionarios
 import view_articulos
+import view_dependencias
 def salir():
     ventana.destroy()
 def  ventana(usu):
@@ -52,7 +53,8 @@ def  ventana(usu):
             ventana.destroy()
             view_funcionarios.eliminar_funcionario(usu)
         elif(value=='Cargar Articulo'):
-            pass
+            ventana.destroy()
+            view_articulos.cargar_articulos(usu)
         elif(value=='Listar Articulos'):
             ventana.destroy()
             view_articulos.listar_articulos(usu)
@@ -63,9 +65,11 @@ def  ventana(usu):
             ventana.destroy()
             view_articulos.cancelar_reserva(usu)
         elif(value=='Crear Dependencia'):
-            pass
+            ventana.destroy()
+            view_dependencias.cargar_dependencia(usu)
         elif(value=='Listar Dependencias'):
-            pass
+            ventana.destroy()
+            view_dependencias.listar_dependencia(usu)
         elif(value=='Cerrar Sesión'):
             ventana.destroy()
             login.inicio()

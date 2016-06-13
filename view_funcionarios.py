@@ -18,21 +18,12 @@ def  listar_funcionarios(usu):
     def inicio():
         funcionarios.destroy()
         bienvenidos.ventana(usu)
-    #window.wm_iconbitmap('favicon.ico')
-    #L1 = tkinter.Label(ventana, font='Arial', text="POR FAVOR ELIJA LA TAREA A REALIZAR")
-    #L1.place(bordermode='outside', height=50,x=100, y=10)
-
     mylistbox=tkinter.Listbox(funcionarios,height=12,width=100,font=('times',13))
     mylistbox.place(x=32,y=110)
-    db = MiZODB()
-    dbroot = db.raiz
-    for key in dbroot.keys():
-        obj = dbroot[key]
-        if isinstance(obj, Funcionario):
-            f="Usuario: "+ key+", Funcionario: "+ obj.nombres+" "+obj.apellidos+ ", Cargo: "+ obj.cargo+ ", Rol: "+obj.rol
-            mylistbox.insert('end',f)
-    db.close()
-
+    ctrl_fun=ControladorFuncionario()
+    fun=ctrl_fun.listar_funcionarios(usu)
+    for values in fun[1]:
+        mylistbox.insert('end',values)
     inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)
     inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
     cerrar = tkinter.Button(funcionarios,text="Cerrar Sesión", command=cerrar)
@@ -61,12 +52,14 @@ def eliminar_funcionario(usu):
         fun.eliminar_funcionario(usu, str(mylistbox.get(mylistbox.curselection())))
         frame2 = tkinter.Message(funcionarios, relief='raised', text='FUNCIONARIO ELIMINADO CON EXITO', width=200)
         frame2.place(bordermode='outside', height=150, width=200, y=30,x=150)
-        button3 = tkinter.Button(frame2,text="Ok", command=cerrar_exp)
-        button3.pack(side="bottom")
-    #window.wm_iconbitmap('favicon.ico')
-    #L1 = tkinter.Label(ventana, font='Arial', text="POR FAVOR ELIJA LA TAREA A REALIZAR")
-    #L1.place(bordermode='outside', height=50,x=100, y=10)
-
+        cerrar = tkinter.Button(frame2,text="Ok", command=cerrar_exp)
+        cerrar.pack(side="bottom")
+    titulo = tkinter.Label(funcionarios, font='Arial', text="Seleccionar el código del funcionario a eliminar")
+    titulo.place(bordermode='outside', height=20, width=600, y=30, x=100)
+    subtitulo1 = tkinter.Label(funcionarios, font='Arial', text="Código")
+    subtitulo1.place(bordermode='outside', height=20, width=150, y=80, x=5)
+    subtitulo2 = tkinter.Label(funcionarios, font='Arial', text="Descripción del funcionario")
+    subtitulo2.place(bordermode='outside', height=20, width=200, y=80, x=135)
     mylistbox=tkinter.Listbox(funcionarios,height=12,width=50,font=('times',13))
     mylistbox.bind('<<ListboxSelect>>',CurSelet)
     mylistbox.place(x=32,y=110)
@@ -78,8 +71,6 @@ def eliminar_funcionario(usu):
         mylistbox.insert('end',key)
     for values in fun[1]:
         mylistbox2.insert('end',values)
-    label_usuario=tkinter.Label(funcionarios, font='Arial', text="POR FAVOR ELIJA EL FUNCIONARIO A ELIMINAR")
-    label_usuario.place(bordermode='outside', height=50,x=100, y=10)
     inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)
     inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
     button1 = tkinter.Button(funcionarios,text="Cerrar Sesión", command=cerrar)
@@ -97,13 +88,9 @@ def cargar_funcionario(usu):
     def salir():
         funcionarios.destroy()
     def inicio():
-        #value=str(cbx.get())
-        #print (value)
         funcionarios.destroy()
         bienvenidos.ventana(usu)
     def cargar():
-        #value=str(cbx.get())
-
         def cerrar_exp():
             funcionarios.destroy()
             cargar_funcionario(usu)
@@ -121,9 +108,9 @@ def cargar_funcionario(usu):
             alerta.place(bordermode='outside', height=150, width=200, y=30,x=150)
             ok = tkinter.Button(alerta,text="Ok", command=cerrar_exp)
             ok.pack(side="bottom")
-
     titulo = tkinter.Label(funcionarios, font='Arial', text="CARGAR FUNCIONARIOS")
     titulo.place(bordermode='outside', height=20, width=300, x=100)
+    #Etiquetas
     lbl_rol = tkinter.Label(funcionarios, font='Arial', text="Ingrese Rol del Funcionario")
     lbl_rol.place(bordermode='outside', height=20, width=200, x=50, y=30)
     lbl_nombre = tkinter.Label(funcionarios, font='Arial',text="Nombres",justify='left')
@@ -149,11 +136,10 @@ def cargar_funcionario(usu):
     lbl_contrasenha = tkinter.Label(funcionarios, font='Arial',text="Contraseña")
     lbl_contrasenha.place(bordermode='outside', height=20, width=200, x=50, y=305)
 
+    #Campos de Texto
     rol= ['Administrador','Gestor','Reservas']
-    rol = ttk.Combobox(funcionarios,value=rol)
+    rol = ttk.Combobox(funcionarios,value=rol,state= 'readonly')
     rol.place(bordermode='outside', height=20, width=200, x=250, y=30)
-    #rol=tkinter.Entry(funcionarios, font='times')
-    #rol.place(bordermode='outside', height=20, width=200, x=250, y=30)
     nombre=tkinter.Entry(funcionarios, font='times')
     nombre.place(bordermode='outside', height=20, width=200, x=250, y=55)
     apellido=tkinter.Entry(funcionarios, font='times')
@@ -162,15 +148,14 @@ def cargar_funcionario(usu):
     documento_identidad.place(bordermode='outside', height=20, width=200, x=250, y=105)
     fecha_nacimiento=tkinter.Entry(funcionarios, font='times')
     fecha_nacimiento.place(bordermode='outside', height=20, width=200, x=250, y=130)
-
     sexo=['MASCULINO','FEMENINO']
-    sexo=ttk.Combobox(funcionarios,value=sexo)
+    sexo=ttk.Combobox(funcionarios,value=sexo,state= 'readonly')
     sexo.place(bordermode='outside', height=20, width=200, x=250, y=155)
     cargo=tkinter.Entry(funcionarios, font='times')
     cargo.place(bordermode='outside', height=20, width=200, x=250, y=180)
     ctrl_dep = ControladorDependencia()
     dep=ctrl_dep.listar_dependencia()
-    dep=ttk.Combobox(funcionarios,value=dep)
+    dep=ttk.Combobox(funcionarios,value=dep[0],state= 'readonly')
     dep.place(bordermode='outside', height=20, width=200, x=250, y=205)
     fecha_ingreso=tkinter.Entry(funcionarios, font='times')
     fecha_ingreso.place(bordermode='outside', height=20, width=200, x=250, y=230)
@@ -180,7 +165,6 @@ def cargar_funcionario(usu):
     usuario.place(bordermode='outside', height=20, width=200, x=250, y=280)
     contrasenha=tkinter.Entry(funcionarios, font='times')
     contrasenha.place(bordermode='outside', height=20, width=200, x=250, y=305)
-#   BOTONES
     cargar = tkinter.Button(funcionarios,text="Cargar", command=cargar)
     cargar.place(bordermode='outside', height=40, width=100, x=40,y=400)
     inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)

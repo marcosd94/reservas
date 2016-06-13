@@ -1,15 +1,16 @@
 from persistence import MiZODB,transaction
 from abc import ABCMeta, abstractmethod
 import datetime
+from controlador_persistence import ControladorPersistence
 class Articulo(metaclass=ABCMeta):
     """Clase Articulo, la cual se encarga de guardar los datos basico de los articulos que se tienen en la Institucion"""
     def __init__(self,fecha_reserva,Funcionario,reservado):
         self.fecha_reserva=fecha_reserva
         self.funcionario = Funcionario
         self.reservado= reservado
-    @abstractmethod
-    def cargar_articulo(self):
-        pass
+    def cargar_articulos(self):
+        persistence= ControladorPersistence()
+        persistence.persistir(self, self.codigo)
     @abstractmethod
     def eliminar_articulo(self):
         pass

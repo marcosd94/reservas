@@ -13,18 +13,6 @@ class Funcionario(Persona,metaclass=ABCMeta):
     def cargar_funcionario(self):
         persistence= ControladorPersistence()
         persistence.persistir(self, self.usuario)
-    def buscar_funcionario(self):
-        db = MiZODB()
-        dbroot = db.raiz
-        for key in dbroot.keys():
-            obj = dbroot[key]
-            if isinstance(obj, Funcionario):
-                print ( "Clave: ", key)
-                print ("Funcionario: ", obj.nombres,obj.apellidos)
-                print ("CI: ", obj.documento_identidad)
-                print ("Cargo: ", obj.cargo)
-                print ("\n---------------------------------")
-                db.close()
     def eliminar_funcionario(self,clave):
         persistence= ControladorPersistence()
         persistence.eliminar(clave)

@@ -7,8 +7,6 @@ class Proyector(Articulo,Reservable):
         self.descripcion= descripcion
         self.codigo= codigo
         self.fecha_ingreso= fecha_ingreso
-    def cargar_articulo(self):
-        pass
     def eliminar_articulo(self):
         pass
     def reservar(self,):

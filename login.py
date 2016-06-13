@@ -33,7 +33,7 @@ def inicio():
                 invalid = tkinter.Button(frame4,text="Ok", command=cerrar_inv)
                 invalid.pack(side="bottom")
     window=tkinter.Tk()
-    window.title("VENTANA DE PRUEBA")
+    window.title("INICIAR SESION")
     window.geometry("500x300")
     titulo = tkinter.Label(window, font='Arial', text="SISTEMA DE RESERVAS")
     titulo.place(bordermode='outside', height=20, width=300, x=100)
