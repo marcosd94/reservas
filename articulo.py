@@ -23,7 +23,7 @@ class Articulo(metaclass=ABCMeta):
             obj = dbroot[key]
             if isinstance(obj, Articulo):
                 if(obj.reservado==True):
-                    lista.append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion+ " Reservado: SI, por: "+obj.funcionario.nombres+" "+ obj.funcionario.apellidos +", en fecha: "+ str(obj.fecha_reserva))
+                    lista.append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion+ " Reservado: SI, por: "+obj.funcionario.nombres+" "+ obj.funcionario.apellidos +", en fecha: "+ str(obj.fecha_reserva.strftime("%Y-%m-%d")))
                 else:
                     lista.append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion+" Reservado: NO")
         db.close()
