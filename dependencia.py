@@ -22,3 +22,6 @@ class Dependencia(object):
     def cargar_dependencia(self):
         persistence= ControladorPersistence()
         persistence.persistir(self, self.codigo_corto)
+    def eliminar_dependencia(self,codigo_corto):
+        persistence= ControladorPersistence()
+        persistence.eliminar(codigo_corto)

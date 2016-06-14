@@ -22,16 +22,19 @@ def  ventana(usu):
         'Eliminar Funcionario',
         'Cargar Articulo',
         'Listar Articulos',
+        'Eliminar Articulo',
         'Reservar Articulo',
         'Cancelar Reserva',
         'Crear Dependencia',
-        'Listar Dependencias']
+        'Listar Dependencias',
+        'Eliminar Dependencia']
     elif isinstance(usu, Gestor):
         itemsforlistbox=[
         'Cargar Articulo',
         'Reservar Articulo',
         'Cancelar Reserva',
         'Listar Articulos',
+        'Eliminar Articulo',
         'Listar Funcionarios',
         'Listar Dependencias']
     else:
@@ -55,6 +58,9 @@ def  ventana(usu):
         elif(value=='Listar Articulos'):
             ventana.destroy()
             view_articulos.listar_articulos(usu)
+        elif(value=='Eliminar Articulo'):
+            ventana.destroy()
+            view_articulos.eliminar_articulo(usu)
         elif(value=='Reservar Articulo'):
             ventana.destroy()
             view_articulos.cargar_reserva(usu)
@@ -67,11 +73,9 @@ def  ventana(usu):
         elif(value=='Listar Dependencias'):
             ventana.destroy()
             view_dependencias.listar_dependencia(usu)
-        elif(value=='Cerrar Sesión'):
+        elif(value=='Eliminar Dependencia'):
             ventana.destroy()
-            login.inicio()
-        elif (value=='Salir'):
-            ventana.destroy()
+            view_dependencias.eliminar_dependencia(usu)
 
     mylistbox=tkinter.Listbox(ventana,height=12,font=('times',13))
     mylistbox.bind('<<ListboxSelect>>',CurSelet)

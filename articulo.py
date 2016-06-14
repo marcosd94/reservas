@@ -12,8 +12,9 @@ class Articulo(metaclass=ABCMeta):
         persistence= ControladorPersistence()
         persistence.persistir(self, self.codigo)
     @abstractmethod
-    def eliminar_articulo(self):
-        pass
+    def eliminar_articulo(self,clave):
+        persistence= ControladorPersistence()
+        persistence.eliminar(clave)
     def listar_articulos(self):
         db = MiZODB()
         dbroot = db.raiz
@@ -22,7 +23,7 @@ class Articulo(metaclass=ABCMeta):
             obj = dbroot[key]
             if isinstance(obj, Articulo):
                 if(obj.reservado==True):
-                    lista.append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion+ " Reservado: SI, en fecha: "+ str(obj.fecha_reserva))
+                    lista.append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion+ " Reservado: SI, por: "+obj.funcionario.nombres+" "+ obj.funcionario.apellidos +", en fecha: "+ str(obj.fecha_reserva))
                 else:
                     lista.append("Codigo articulo: "+ key+", descripcion: "+ obj.descripcion+" Reservado: NO")
         db.close()

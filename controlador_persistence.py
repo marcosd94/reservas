@@ -8,10 +8,14 @@ class ControladorPersistence():
         transaction.commit()
         db.close()
     def leer(self,clave):
-        db=MiZODB()
-        dbroot=db.raiz
-        obj=dbroot[clave]
-        db.close()
+        try:
+            db=MiZODB()
+            dbroot=db.raiz
+            obj=dbroot[clave]
+            db.close()
+        except:
+            db.close()
+            raise Exception('La clave del objeto indicado no existe')
         return obj
     def eliminar(self,clave):
         db=MiZODB()

@@ -11,7 +11,6 @@ def inicio():
             usu=dbroot[usuario.get()]
             db.close()
         except:
-
             def cerrar_exp():
                 frame2.destroy()
             db.close()
@@ -23,8 +22,6 @@ def inicio():
             if(usu.password == contraseña.get()):
                 window.destroy()
                 bienvenidos.ventana(usu)
-                #frame3 = tkinter.Message(window, relief='raised', text='BIENVENIDO', width=50)
-                #frame3.pack()
             else:
                 def cerrar_inv():
                     frame4.destroy()
@@ -50,12 +47,3 @@ def inicio():
     button0 = tkinter.Button(window,text="Salir", command=salir)
     button0.place(bordermode='outside', height=40, width=100, x=160,y=90)
     window.mainloop()
-
-#listbox = tkinter.Listbox(window)
-#listbox.pack()
-
-#listbox.insert(0, "a list entry")
-#x=1
-#for item in ["one", "two", "three", "four"]:
-#    listbox.insert(x, item)
-#    x=x+1

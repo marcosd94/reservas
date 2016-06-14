@@ -80,10 +80,58 @@ def listar_dependencia(usu):
     for values in ctrl_dep[1]:
         mylistbox.insert('end',values)
 
+    titulo = tkinter.Label(dependencia, font='Arial', text="LISTADO DE DEPENDENCIAS")
+    titulo.place(bordermode='outside', height=20, width=600, y=30, x=100)
     inicio = tkinter.Button(dependencia,text="Inicio", command=inicio)
     inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
     cerrar = tkinter.Button(dependencia,text="Cerrar Sesión", command=cerrar)
     cerrar.place(bordermode='outside', height=40, width=100, x=140,y=400)
     salir = tkinter.Button(dependencia,text="Salir", command=salir)
     salir.place(bordermode='outside', height=40, width=100, x=240,y=400)
+    dependencia.mainloop()
+def eliminar_dependencia(usu):
+    dependencia=tkinter.Tk()
+    dependencia.title("ELIMINAR DEPENDENCIA")
+    dependencia.geometry("950x500")
+    def cerrar():
+        dependencia.destroy()
+        login.inicio()
+    def salir():
+        dependencia.destroy()
+    def inicio():
+        dependencia.destroy()
+        bienvenidos.ventana(usu)
+    def CurSelet(evt):
+        def cerrar_exp():
+            dependencia.destroy()
+            eliminar_dependencia(usu)
+        ctrl_dep=ControladorDependencia()
+        ctrl_dep.eliminar_dependencia(usu, str(mylistbox.get(mylistbox.curselection())))
+        frame2 = tkinter.Message(dependencia, relief='raised', text='DEPENDENCIA ELIMINADA CON EXITO', width=200)
+        frame2.place(bordermode='outside', height=150, width=200, y=30,x=150)
+        cerrar = tkinter.Button(frame2,text="Ok", command=cerrar_exp)
+        cerrar.pack(side="bottom")
+    titulo = tkinter.Label(dependencia, font='Arial', text="Seleccionar el código corto de la dependencia a eliminar")
+    titulo.place(bordermode='outside', height=20, width=600, y=30, x=100)
+    subtitulo1 = tkinter.Label(dependencia, font='Arial', text="Código")
+    subtitulo1.place(bordermode='outside', height=20, width=150, y=80, x=5)
+    subtitulo2 = tkinter.Label(dependencia, font='Arial', text="Descripción de la dependencia")
+    subtitulo2.place(bordermode='outside', height=20, width=300, y=80, x=135)
+    mylistbox=tkinter.Listbox(dependencia,height=12,width=50,font=('times',13))
+    mylistbox.bind('<<ListboxSelect>>',CurSelet)
+    mylistbox.place(x=32,y=110)
+    mylistbox2=tkinter.Listbox(dependencia,height=12,width=70,font=('times',13))
+    mylistbox2.place(x=132,y=110)
+    ctrl_dep=ControladorDependencia()
+    dep=ctrl_dep.listar_dependencia()
+    for key in dep[0] :
+        mylistbox.insert('end',key)
+    for values in dep[1]:
+        mylistbox2.insert('end',values)
+    inicio = tkinter.Button(dependencia,text="Inicio", command=inicio)
+    inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
+    button1 = tkinter.Button(dependencia,text="Cerrar Sesión", command=cerrar)
+    button1.place(bordermode='outside', height=40, width=100, x=140,y=400)
+    button0 = tkinter.Button(dependencia,text="Salir", command=salir)
+    button0.place(bordermode='outside', height=40, width=100, x=240,y=400)
     dependencia.mainloop()

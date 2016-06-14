@@ -7,13 +7,11 @@ class Notebook(Articulo,Reservable):
         self.descripcion= descripcion
         self.codigo= codigo
         self.fecha_ingreso= fecha_ingreso
-    def eliminar_articulo(self):
-        pass
+    def eliminar_articulo(self,clave):
+        super(Notebook, self).eliminar_articulo(clave)
     def reservar(self,):
         pass
     def aceptar_reserva(self):
         pass
     def rechazar_reserva(self):
         pass
-#note = Notebook('si','16/05/2016','Marcos Peralta','Notebook HP', '001', '12/04/2016')
-#print ( note.descripcion,note.funcionario)

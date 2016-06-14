@@ -7,8 +7,8 @@ class MultipleElectrico(Articulo,Reservable):
         self.descripcion= descripcion
         self.codigo= codigo
         self.fecha_ingreso= fecha_ingreso
-    def eliminar_articulo(self):
-        pass
+    def eliminar_articulo(self,clave):
+        super(MultipleElectrico, self).eliminar_articulo(clave)
     def reservar(self,):
         pass
     def aceptar_reserva(self):

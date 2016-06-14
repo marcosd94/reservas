@@ -24,6 +24,8 @@ def  listar_funcionarios(usu):
     fun=ctrl_fun.listar_funcionarios(usu)
     for values in fun[1]:
         mylistbox.insert('end',values)
+    titulo = tkinter.Label(funcionarios, font='Arial', text="LISTADO DE FUNCIONARIOS")
+    titulo.place(bordermode='outside', height=20, width=600, y=30, x=100)
     inicio = tkinter.Button(funcionarios,text="Inicio", command=inicio)
     inicio.place(bordermode='outside', height=40, width=100, x=40,y=400)
     cerrar = tkinter.Button(funcionarios,text="Cerrar Sesión", command=cerrar)
@@ -31,7 +33,6 @@ def  listar_funcionarios(usu):
     salir = tkinter.Button(funcionarios,text="Salir", command=salir)
     salir.place(bordermode='outside', height=40, width=100, x=240,y=400)
     funcionarios.mainloop()
-
 def eliminar_funcionario(usu):
     funcionarios=tkinter.Tk()
     funcionarios.title("ELIMINAR FUNCIONARIOS")

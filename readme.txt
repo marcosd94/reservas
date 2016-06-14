@@ -8,7 +8,7 @@ RESERVA DE EQUIPOS INFORMATICOS
 Para la ejecucion correcta del programa previamente se debe instalar la Base de Datos Orientada a Objetos ZODB
 El programa fue desarrollado bajo la version 3 de PYTHON.
 Para iniciar el programa se debe ejecutar el archivo index.py con el siguiente comando en linux:
-$ python3 index.py
+$ python3 inicio.py
 
 Usuarios:
 Se cuentan con 3 roles en el sistema.

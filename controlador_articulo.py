@@ -25,10 +25,28 @@ class ControladorArticulo():
         a=Notebook(None,None,None, None, None,None)
         return a.listar_articulos()
     def cargar_articulos(self,fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso,reservado,tipo):
-        if( tipo == 'Notebook'):
-            a= Notebook(fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso,reservado)
-        elif(tipo=='Proyector'):
-            a= Proyector(fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso,reservado)
-        elif(tipo=='Multiple Electrico'):
-            a= MultipleElectrico(fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso,reservado)
-        a.cargar_articulos()
+        if ( codigo=='' or codigo == None):
+            raise Exception('Codigo de la dependencia vacio')
+        else:
+            try:
+                value=int(codigo)
+            except:
+                raise Exception('El código del articulo debe ser del tipo númerico')
+            else:
+                try:
+                    persistence = ControladorPersistence()
+                    persistence.leer(codigo)
+                except:
+                    if( tipo == 'Notebook'):
+                        a= Notebook(fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso,reservado)
+                    elif(tipo=='Proyector'):
+                        a= Proyector(fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso,reservado)
+                    elif(tipo=='Multiple Electrico'):
+                        a= MultipleElectrico(fecha_reserva,Funcionario,descripcion, codigo, fecha_ingreso,reservado)
+                    a.cargar_articulos()
+                else:
+                    raise Exception('El código del articulo ya existe')
+    def eliminar_articulo(self,usuario,articulo):
+        persistence = ControladorPersistence()
+        articulo=persistence.leer(articulo)
+        articulo.eliminar_articulo(articulo.codigo)
