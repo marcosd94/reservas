@@ -1,7 +1,8 @@
 from dependencia import Dependencia
 from controlador_persistence import ControladorPersistence
+from time import strptime
 class ControladorDependencia():
-    """docstring for """
+    """Clase Controlador de las Dependencias"""
     def listar_dependencia(self):
         dep = Dependencia(None,None, None,None)
         lista= dep.listar_dependencia();
@@ -11,9 +12,12 @@ class ControladorDependencia():
             raise Exception('Codigo corto vacio')
         else:
             try:
+                strptime(fecha_creacion, '%d/%m/%Y')
                 persistence = ControladorPersistence()
                 persistence.leer(codigo_corto)
-            except:
+            except ValueError:
+                raise Exception('El formato no corresponde\nfavor ingresar de la siguiente manera dd/mm/yyyy')
+            except Exception:
                 dep = Dependencia(nombre_dependencia,codigo_corto, fecha_creacion,activo)
                 dep.cargar_dependencia()
             else:

@@ -1,6 +1,6 @@
 from persistence import MiZODB,transaction
 class ControladorPersistence():
-    """docstring for """
+    """Clase Controlador de la clase MiZODB"""
     def persistir(self,obj,clave):
         db=MiZODB()
         dbroot=db.raiz

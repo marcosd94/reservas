@@ -58,15 +58,18 @@ def cargar_articulos(usu):
     articulos.geometry("800x500")
     def cerrar():
         articulos.destroy()
+        articulos.eval('::ttk::CancelRepeat')
         login.inicio()
     def salir():
         articulos.destroy()
     def inicio():
         articulos.destroy()
+        articulos.eval('::ttk::CancelRepeat')
         bienvenidos.ventana(usu)
     def cargar():
         def cerrar_exp():
             articulos.destroy()
+            articulos.eval('::ttk::CancelRepeat')
             cargar_articulos(usu)
         try:
             ctrl_art=ControladorArticulo()

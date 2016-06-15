@@ -6,7 +6,7 @@ from controlador_funcionario import ControladorFuncionario
 import login
 import bienvenidos
 import tkinter.ttk as ttk
-def  listar_funcionarios(usu):
+def listar_funcionarios(usu):
     funcionarios=tkinter.Tk()
     funcionarios.title("LISTADO DE FUNCIONARIOS")
     funcionarios.geometry("1000x500")
@@ -85,15 +85,18 @@ def cargar_funcionario(usu):
     funcionarios.geometry("800x500")
     def cerrar():
         funcionarios.destroy()
+        funcionarios.eval('::ttk::CancelRepeat')
         login.inicio()
     def salir():
         funcionarios.destroy()
     def inicio():
         funcionarios.destroy()
+        funcionarios.eval('::ttk::CancelRepeat')
         bienvenidos.ventana(usu)
     def cargar():
         def cerrar_exp():
             funcionarios.destroy()
+            funcionarios.eval('::ttk::CancelRepeat')
             cargar_funcionario(usu)
         try:
             fun=ControladorFuncionario()

@@ -3,6 +3,7 @@ from ZODB import FileStorage, DB
 import transaction
 
 class MiZODB():
+    """Clase MiZODB para la persistencia de los objetos"""
     def __init__(self):
         self.storage = FileStorage.FileStorage('Data.fs')
         self.db = DB(self.storage)

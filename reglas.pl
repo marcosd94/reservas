@@ -5,6 +5,6 @@ administrador(mperalta).
 gestor(jparedes).
 reservas(pmarmol).
 
-eliminar_articulo(X) :- administrador(X); gestor(X).
-eliminar_funcionario(X) :- administrador(X).
-reservar_articulo(X) :- administrador(X); gestor(X); reservas(X).
+eliminar_articulo(Usuario) :- administrador(Usuario); gestor(Usuario).
+eliminar_funcionario(Usuario) :- administrador(Usuario).
+reservar_articulo(Usuario) :- administrador(Usuario); gestor(Usuario); reservas(Usuario).

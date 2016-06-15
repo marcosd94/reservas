@@ -45,7 +45,7 @@ def cargar_dependencia(usu):
     lbl_fecha_creacion.place(bordermode='outside', height=20, width=200, x=50, y=80)
 
     nombre_dependencia=tkinter.Entry(dependencia, font='times')
-    nombre_dependencia.place(bordermode='outside', height=20, width=200, x=250, y=30)
+    nombre_dependencia.place(bordermode='outside', height=20, width=400, x=250, y=30)
     codigo_corto=tkinter.Entry(dependencia, font='times')
     codigo_corto.place(bordermode='outside', height=20, width=200, x=250, y=55)
     fecha_creacion=tkinter.Entry(dependencia, font='times')
@@ -73,8 +73,11 @@ def listar_dependencia(usu):
         dependencia.destroy()
         bienvenidos.ventana(usu)
 
-    mylistbox=tkinter.Listbox(dependencia,height=12,width=100,font=('times',13))
+    scrollbar = tkinter.Scrollbar(dependencia,orient='horizontal')
+    scrollbar.pack(side='bottom', fill='x')
+    mylistbox=tkinter.Listbox(dependencia,height=12,width=100,font=('times',13),xscrollcommand=scrollbar.set)
     mylistbox.place(x=32,y=110)
+    scrollbar.config(command=mylistbox.xview, background='gray')
     ctrl_dep = ControladorDependencia()
     ctrl_dep=ctrl_dep.listar_dependencia()
     for values in ctrl_dep[1]:
