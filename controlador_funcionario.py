@@ -12,6 +12,7 @@ class ControladorFuncionario():
             persistence = ControladorPersistence()
             try:
                 strptime(fecha_nacimiento, '%d/%m/%Y')
+                strptime(fecha_ingreso, '%d/%m/%Y')
                 persistence.leer(usuario)
             except ValueError:
                 raise Exception('El formato no corresponde\nfavor ingresar de la siguiente manera dd/mm/yyyy')

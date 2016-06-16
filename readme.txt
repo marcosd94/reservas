@@ -10,6 +10,8 @@ El programa fue desarrollado bajo la version 3 de PYTHON.
 Para iniciar el programa se debe ejecutar el archivo index.py con el siguiente comando en linux:
 $ python3 inicio.py
 
+Para ejecutar el archivo prolog ser debe ejecutar el siguiente comadno en linux consult('reglas.pl').
+
 Usuarios:
 Se cuentan con 3 roles en el sistema.
 
